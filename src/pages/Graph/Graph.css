@@ -1,0 +1,45 @@
+:root {
+    --head: #837d7d;
+    --side: #aaa6a4;
+    --row-break: #d6d0b8;
+    --fixed-slot: #f1f4c6;
+    --submit-btn: #e8ad7c;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: 1.2vw;
+    padding: 10px;
+    text-align: center;
+}
+
+td {
+    width: 7vw;
+}
+
+.editable {
+    cursor: pointer;
+}
+
+.head-row {
+    background-color: var(--head);
+    color: white;
+}
+
+.time-slot {
+    background-color: var(--fixed-slot);
+    font-weight: bold;
+}
+.schedule {
+    font-weight: bold;
+    font-size: 1.4vw;
+}
+.side {
+    background-color: var(--side);
+}
+
+/*Row-break*/
+.row-break {
+    background-color: var(--row-break);
+}

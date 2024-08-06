@@ -1,0 +1,17 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2vw 5vw 2vw;
+}
+.main-page h1 {
+    font-size: 4vw;
+}
+.main-page p {
+    font-size: 2vw;
+}
+#date-input {
+    width: 10vw;
+    font-size: 1.2vw;
+    margin: 1vw 0;
+}
