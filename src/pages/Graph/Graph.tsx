@@ -4,6 +4,7 @@ import {Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 import {getDate, formatDay, isHoliday} from "../../features/TimeController";
 import {useEditSchedule} from "../../features/EditSchedule";
+import {assignToSchedule} from "../../features/AssignSchedule";
 
 interface GraphProps {
     startDate: string | null;
@@ -16,10 +17,6 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
 
     const dates = startDate ? getDate(startDate) : [];
 
-    const getEmployeeName = (name: string) => {
-        return employees.find(employee => employee.name === name);
-    }
-
     const getFulltimeEmployeeName = (name: string) => {
         return fulltimeEmployees.find(fulltimeEmployee => fulltimeEmployee.name === name);
     }
@@ -29,7 +26,8 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
 
     const {
         renderCell,
-        generateCells
+        generateCells,
+        generateDynamicCells
     } = useEditSchedule({ data, setData, isEditing, setIsEditing});
 
     return (
@@ -58,10 +56,10 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <td></td>
                         <td></td>
                         <td></td>
-                        {manager && manager.availableDate.map((availability, index) => (
-                            <td key={index} className="time-slot editable">{renderCell(1, index, availability === "OFF" ? "OFF" : manager.name)}</td>
-                                )
-                        )}
+                        {generateCells(1,1,4, () => manager?.name || '')}
+                        <td className="schedule editable">{renderCell(1,5,'OFF')}</td>
+                        <td className="schedule editable">{renderCell(1,6,manager?.name || '')}</td>
+                        <td className="schedule editable">{renderCell(1,7,'OFF')}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -92,37 +90,37 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <td className="side">A</td>
                         <td>11:00-3:30</td>
                         <td className="schedule editable">{renderCell(2,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateCells(2,2,6, '')}
+                        {generateCells(2,2,6, () => '')}
                         <td className="schedule editable">{renderCell(2,7,hyobin?.name  + "(D)"|| '')}</td>
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>11:00-3:30</td>
-                        <td className="schedule editable">{renderCell(3,1,'Anyone' || '')}</td>
-                        {generateCells(3,2,6, '')}
-                        <td className="schedule editable">{renderCell(3,7,'Anyone' || '')}</td>
+                        {generateDynamicCells(3,1,1, "DAY",'B')}
+                        {generateCells(3,2,6, () => '')}
+                        {generateDynamicCells(3,6,6, "DAY",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>11:00-3:30</td>
                         <td className="schedule editable">{renderCell(4,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateCells(4,2,6, '')}
+                        {generateCells(4,2,6, () => '')}
                         <td className="schedule editable">{renderCell(4,7,yunseon?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>12:30-4:30</td>
-                        {generateCells(5,1,7, '')}
+                        {generateCells(5,1,7, () => '')}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>12:30-4:30</td>
-                        {generateCells(6,1,7, '')}
+                        {generateCells(6,1,7, () => '')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>12:30-4:30</td>
-                        {generateCells(7,1,7, '')}
+                        {generateCells(7,1,7, () => '')}
                     </tr>
                     <tr className="row-break">
                         <td colSpan={days.length + 3}></td>
@@ -133,51 +131,50 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <td className="side">A</td>
                         <td>3:30-1st CUT</td>
                         <td className="schedule editable">{renderCell(9,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateCells(9,2,6, '')}
+                        {generateDynamicCells(9,2,6, "NIGHT", 'A')}
                         <td className="schedule editable">{renderCell(9,7,hyobin?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>3:30-1st CUT</td>
-                        <td className="schedule editable">{renderCell(10,1,'Anyone' || '')}</td>
-                        {generateCells(10,2,7, '')}
+                        {generateDynamicCells(10,1,7, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>3:30-1st CUT</td>
                         <td className="schedule editable">{renderCell(11,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateCells(11,2,6, '')}
+                        {generateDynamicCells(11,2,6, "NIGHT",'BAR')}
                         <td className="schedule editable">{renderCell(11,7,yunseon?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>4:30-2nd CUT</td>
-                        {generateCells(12,1,7, '')}
+                        {generateDynamicCells(12,1,7, "NIGHT",'A')}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>4:30-2nd CUT</td>
-                        {generateCells(13,1,7, '')}
+                        {generateDynamicCells(13,1,7, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>4:30-2nd CUT</td>
-                        {generateCells(14,1,7, '')}
+                        {generateDynamicCells(14,1,7, "NIGHT",'BAR')}
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>5:30-STAY</td>
-                        {generateCells(15,1,7, '')}
+                        {generateDynamicCells(15,1,7, "NIGHT",'A')}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>5:30-STAY</td>
-                        {generateCells(16,1,7, '')}
+                        {generateDynamicCells(16,1,7, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>5:30-STAY</td>
-                        {generateCells(17,1,7, '')}
+                        {generateDynamicCells(17,1,7, "NIGHT",'BAR')}
                     </tr>
                     <tr className="row-break">
                         <td colSpan={days.length + 2}></td>
@@ -185,24 +182,27 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                     <tr>
                         <td className="side">HOST</td>
                         <td>4:00-LC</td>
-                        {generateCells(19,1,7, '')}
+                        {generateDynamicCells(19,1,7, "NIGHT",'HOST')}
+                    </tr>
+                    <tr>
+                        <td className="row-break" colSpan={10}></td>
                     </tr>
                 {/*Training*/}
                     <tr>
                         <th rowSpan={3}>TRAINEE</th>
                         <td className="side">SERVER</td>
                         <td>3:30-STAY</td>
-                        {generateCells(20,1,7, '')}
+                        {generateCells(20,1,7, () => '')}
                     </tr>
                     <tr>
                         <td className="side">HOST</td>
                         <td>4:00-LC</td>
-                        {generateCells(21,1,7, '')}
+                        {generateCells(21,1,7, () => '')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>3:30-STAY</td>
-                        {generateCells(22,1,7, '')}
+                        {generateCells(22,1,7, () => '')}
                     </tr>
                 </tbody>
             </table>

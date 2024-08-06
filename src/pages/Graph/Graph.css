@@ -6,6 +6,11 @@
     --submit-btn: #e8ad7c;
 }
 
+.schedule-graph {
+    background-color: white;
+    z-index: 10;
+}
+
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;

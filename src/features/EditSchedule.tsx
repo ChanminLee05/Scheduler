@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {assignToSchedule} from "./AssignSchedule";
+import {days} from "../entities/Date";
 
 interface EditScheduleProps {
     data: { [key: number]: string[] };
@@ -6,6 +8,15 @@ interface EditScheduleProps {
     isEditing: { rowIndex: number; cellIndex: number } | null;
     setIsEditing: React.Dispatch<React.SetStateAction<{ rowIndex: number; cellIndex: number } | null>>;
 }
+
+const shiftCounts: Record<string, number> = {}; // Track the number of shifts per employee
+
+const updateShiftCount = (employeeName: string) => {
+    if (!shiftCounts[employeeName]) {
+        shiftCounts[employeeName] = 0;
+    }
+    shiftCounts[employeeName] += 1;
+};
 
 export const useEditSchedule = ({ data, setData, isEditing, setIsEditing}: EditScheduleProps) => {
     const [cellValue, setCellValue] = useState<string>('');
@@ -56,16 +67,46 @@ export const useEditSchedule = ({ data, setData, isEditing, setIsEditing}: EditS
         )
     }
 
-    const generateCells = (rowIndex: number, startCellIndex: number, endCellIndex: number, defaultValue: string) => {
+    const generateCells = (
+        rowIndex: number,
+        startCellIndex: number,
+        endCellIndex: number,
+        valueFunction: (cellIndex: number) => string
+    ) => {
         const cells = [];
         for (let i = startCellIndex; i <= endCellIndex; i++) {
             cells.push(
                 <td key={i} className="schedule editable">
-                    {renderCell(rowIndex ,i, defaultValue)}
+                    {renderCell(rowIndex, i, valueFunction(i))}
                 </td>
             )
         }
         return cells;
+    }
+
+    const getDayOfWeek = (index: number) => {
+        return days[index - 1] || '';
+    }
+
+    const generateDynamicCells = (
+        rowIndex: number,
+        startCellIndex: number,
+        endCellIndex: number,
+        timeOfDay?: "DAY" | "NIGHT",
+        position?: string
+    ) => {
+        return generateCells(rowIndex, startCellIndex, endCellIndex, (cellIndex) => {
+            const dayOfWeek = getDayOfWeek(cellIndex);
+            if (dayOfWeek) {
+                if (timeOfDay === "DAY" || timeOfDay === "NIGHT") {
+                    return assignToSchedule(dayOfWeek, timeOfDay, position);
+                } else {
+                    return "Invalid time of day";
+                }
+            } else {
+                return "Invalid day";
+            }
+        });
     }
 
     return {
@@ -74,7 +115,8 @@ export const useEditSchedule = ({ data, setData, isEditing, setIsEditing}: EditS
         handleBlur,
         handleKeyDown,
         renderCell,
-        generateCells
+        generateCells,
+        generateDynamicCells
     }
 }
 
