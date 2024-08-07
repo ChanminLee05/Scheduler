@@ -9,15 +9,6 @@ interface EditScheduleProps {
     setIsEditing: React.Dispatch<React.SetStateAction<{ rowIndex: number; cellIndex: number } | null>>;
 }
 
-const shiftCounts: Record<string, number> = {}; // Track the number of shifts per employee
-
-const updateShiftCount = (employeeName: string) => {
-    if (!shiftCounts[employeeName]) {
-        shiftCounts[employeeName] = 0;
-    }
-    shiftCounts[employeeName] += 1;
-};
-
 export const useEditSchedule = ({ data, setData, isEditing, setIsEditing}: EditScheduleProps) => {
     const [cellValue, setCellValue] = useState<string>('');
 
