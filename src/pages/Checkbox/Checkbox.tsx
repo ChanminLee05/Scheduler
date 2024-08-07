@@ -60,7 +60,16 @@ const Checkbox: React.FC = () => {
                         {fulltimeEmployeeSchedule.map((fullTimeEmployee, empIndex) => (
                             <React.Fragment key={empIndex}>
                                 <tr>
-                                    <td>{fullTimeEmployee.name}</td>
+                                    <td>
+                                        <div className="name-btn-container">
+                                            <span className="emp-name">
+                                                {fullTimeEmployee.name}<i className="fa-solid fa-pen-to-square"></i>
+                                            </span>
+                                            <button type="button" className="remove-btn">
+                                                <i className="fa-solid fa-circle-minus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                     {days.map((day, dayIndex) => {
                                         const checkboxId = `cbx-46-${empIndex}-${dayIndex}`;
                                         return (
@@ -88,8 +97,14 @@ const Checkbox: React.FC = () => {
                                     <td colSpan={days.length + 1}></td>
                                 </tr>
                             </React.Fragment>
-
                         ))}
+                        <tr>
+                            <td colSpan={days.length + 1}>
+                                <button type="button" className="add-btn">
+                                    <i className="fa-solid fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
                         <tr>
                             <td colSpan={days.length + 1} className="part-time-text">
                                 Part-Time Employees
@@ -98,7 +113,16 @@ const Checkbox: React.FC = () => {
                         {employeeSchedule.map((employee, empIndex) => (
                             <React.Fragment key={empIndex}>
                                 <tr>
-                                    <td>{employee.name}</td>
+                                    <td>
+                                        <div className="name-btn-container">
+                                            <span className="emp-name">
+                                                {employee.name}<i className="fa-solid fa-pen-to-square"></i>
+                                            </span>
+                                            <button type="button" className="remove-btn">
+                                                <i className="fa-solid fa-circle-minus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                     {days.map((day, dayIndex) => {
                                         const checkboxId = `cbx-47-${empIndex}-${dayIndex}`;
                                         return (
@@ -127,6 +151,13 @@ const Checkbox: React.FC = () => {
                                 </tr>
                             </React.Fragment>
                         ))}
+                        <tr>
+                            <td colSpan={days.length + 1}>
+                                <button type="button" className="add-btn">
+                                    <i className="fa-solid fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
             <input type="submit" value="SAVE EMPLOYEE'S AVAILABLE DATE" id="save-availability-btn" />
