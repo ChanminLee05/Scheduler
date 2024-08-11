@@ -7,14 +7,14 @@ export interface Employees {
 }
 
 export const fulltimeEmployeeSchedule: Employees[] = [
-    { name: "WILL", availableDay: ["SUN", "MON", "TUE", "WED", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition: ["Manager", "HOST"], maxShifts: 5},
+    { name: "WILL", availableDay: ["SUN", "MON", "TUE", "WED", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition: ["Manager", "HOST"], maxShifts: 2},
     { name: "HYOBIN", availableDay: ["SUN", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 5},
     { name: "YUNSEON", availableDay: ["SUN", "MON", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 5},
 ]
 export const employeeSchedule: Employees[] =[
     { name: "LEO", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 3},
     { name: "NAEUN", availableDay: ["SUN", "MON", "TUE", "THU", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 3},
-    { name: "CHANMIN", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 3},
+    { name: "CHANMIN", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 4},
     { name: "KEVIN", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 3},
     { name: "JUDE", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 3},
     { name: "CHAEA", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 3},
