@@ -3,32 +3,30 @@ import "./Graph.css";
 import {Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 import {getDate, formatDay, isHoliday} from "../../features/TimeController";
-import {useEditSchedule} from "../../features/EditSchedule";
-import {assignToSchedule} from "../../features/AssignSchedule";
+import {useEditName} from "../../features/UseEditName";
+import {generateCells, generateDynamicCells } from "../../features/CellUtills";
 
 interface GraphProps {
     startDate: string | null;
-    employees: Employees[];
-    fulltimeEmployees: Employees[];
+    fullTimeEmployees: Employees[];
+    partTimeEmployees: Employees[];
 }
-const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }) => {
-    const [isEditing, setIsEditing] = useState<{ rowIndex: number, cellIndex: number} | null>(null);
+const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmployees}) => {
     const [data, setData] = useState<{ [key: number]: string[] }>({});
 
     const dates = startDate ? getDate(startDate) : [];
 
+    const usedEmployees: Record<string, number> = {};
+
     const getFulltimeEmployeeName = (name: string) => {
-        return fulltimeEmployees.find(fulltimeEmployee => fulltimeEmployee.name === name);
+        return fullTimeEmployees.find(fullTimeEmployee => fullTimeEmployee.name === name);
     }
+
     const manager = getFulltimeEmployeeName("WILL");
     const hyobin = getFulltimeEmployeeName("HYOBIN");
     const yunseon = getFulltimeEmployeeName("YUNSEON");
 
-    const {
-        renderCell,
-        generateCells,
-        generateDynamicCells
-    } = useEditSchedule({ data, setData, isEditing, setIsEditing});
+    const { editName } = useEditName({ data, setData});
 
     return (
         <div className="schedule-graph">
@@ -56,10 +54,10 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <td></td>
                         <td></td>
                         <td></td>
-                        {generateCells(1,1,4, () => manager?.name || '')}
-                        <td className="schedule editable">{renderCell(1,5,'OFF')}</td>
-                        <td className="schedule editable">{renderCell(1,6,manager?.name || '')}</td>
-                        <td className="schedule editable">{renderCell(1,7,'OFF')}</td>
+                        {generateCells(1, 1, 4, () => manager?.name || '', editName)}
+                        <td className="schedule editable">{editName(1,5,'OFF')}</td>
+                        <td className="schedule editable">{editName(1,6,manager?.name || '')}</td>
+                        <td className="schedule editable">{editName(1,7,'OFF')}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -89,38 +87,38 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <th rowSpan={6}>Lunch</th>
                         <td className="side">A</td>
                         <td>11:00-3:30</td>
-                        <td className="schedule editable">{renderCell(2,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateCells(2,2,6, () => '')}
-                        <td className="schedule editable">{renderCell(2,7,hyobin?.name  + "(D)"|| '')}</td>
+                        <td className="schedule editable">{editName(2,1,yunseon?.name + "(D)" || '')}</td>
+                        {generateCells(2,2,6, () => '', editName)}
+                        <td className="schedule editable">{editName(2,7,hyobin?.name  + "(D)"|| '')}</td>
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>11:00-3:30</td>
-                        {generateDynamicCells(3,1,1, "DAY",'B')}
-                        {generateCells(3,2,6, () => '')}
-                        {generateDynamicCells(3,6,6, "DAY",'B')}
+                        {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B')}
+                        {generateCells(3,2,6, () => '', editName)}
+                        {generateDynamicCells(editName, 3,6,6, usedEmployees, "DAY",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>11:00-3:30</td>
-                        <td className="schedule editable">{renderCell(4,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateCells(4,2,6, () => '')}
-                        <td className="schedule editable">{renderCell(4,7,yunseon?.name + "(D)" || '')}</td>
+                        <td className="schedule editable">{editName(4,1,hyobin?.name + "(D)" || '')}</td>
+                        {generateCells(4,2,6, () => '', editName)}
+                        <td className="schedule editable">{editName(4,7,yunseon?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>12:30-4:30</td>
-                        {generateCells(5,1,7, () => '')}
+                        {generateCells(5,1,7, () => '', editName)}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>12:30-4:30</td>
-                        {generateCells(6,1,7, () => '')}
+                        {generateCells(6,1,7, () => '', editName)}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>12:30-4:30</td>
-                        {generateCells(7,1,7, () => '')}
+                        {generateCells(7,1,7, () => '', editName)}
                     </tr>
                     <tr className="row-break">
                         <td colSpan={days.length + 3}></td>
@@ -130,51 +128,59 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <th rowSpan={11}>Dinner</th>
                         <td className="side">A</td>
                         <td>3:30-1st CUT</td>
-                        <td className="schedule editable">{renderCell(9,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateDynamicCells(9,2,6, "NIGHT", 'A')}
-                        <td className="schedule editable">{renderCell(9,7,hyobin?.name + "(D)" || '')}</td>
+                        <td className="schedule editable">{editName(9,1,yunseon?.name + "(D)" || '')}</td>
+                        {generateDynamicCells(editName, 9,2,6, usedEmployees, "NIGHT", 'A')}
+                        <td className="schedule editable">{editName(9,7,hyobin?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>3:30-1st CUT</td>
-                        {generateDynamicCells(10,1,7, "NIGHT",'B')}
+                        {generateDynamicCells(editName, 10,1,7, usedEmployees, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>3:30-1st CUT</td>
-                        <td className="schedule editable">{renderCell(11,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateDynamicCells(11,2,6, "NIGHT",'BAR')}
-                        <td className="schedule editable">{renderCell(11,7,yunseon?.name + "(D)" || '')}</td>
+                        <td className="schedule editable">{editName(11,1,hyobin?.name + "(D)" || '')}</td>
+                        {generateDynamicCells(editName, 11,2,6, usedEmployees, "NIGHT",'BAR')}
+                        <td className="schedule editable">{editName(11,7,yunseon?.name + "(D)" || '')}</td>
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(12,1,7, "NIGHT",'A')}
+                        {generateDynamicCells(editName, 12,1,1, usedEmployees, "NIGHT",'A')}
+                        {generateCells(12,2,4, () => 'X', editName)}
+                        {generateDynamicCells(editName, 12,5,7, usedEmployees, "NIGHT",'A')}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(13,1,7, "NIGHT",'B')}
+                        {generateDynamicCells(editName, 13,1,7, usedEmployees, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(14,1,7, "NIGHT",'BAR')}
+                        {generateDynamicCells(editName, 14,1,7, usedEmployees, "NIGHT",'BAR')}
                     </tr>
                     <tr>
                         <td className="side">A</td>
                         <td>5:30-STAY</td>
-                        {generateDynamicCells(15,1,7, "NIGHT",'A')}
+                        {generateDynamicCells(editName, 15,1,4, usedEmployees, "NIGHT",'A')}
+                        {generateCells(15,5,5, () => 'X', editName)}
+                        {generateDynamicCells(editName, 15,6,7, usedEmployees, "NIGHT",'A')}
                     </tr>
                     <tr>
                         <td className="side">B</td>
                         <td>5:30-STAY</td>
-                        {generateDynamicCells(16,1,7, "NIGHT",'B')}
+                        {generateDynamicCells(editName, 16,1,1, usedEmployees, "NIGHT",'B')}
+                        {generateCells(16,2,5, () => 'X', editName)}
+                        {generateDynamicCells(editName, 16,6,7, usedEmployees, "NIGHT",'B')}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>5:30-STAY</td>
-                        {generateDynamicCells(17,1,7, "NIGHT",'BAR')}
+                        {generateDynamicCells(editName, 17,1,1, usedEmployees, "NIGHT",'BAR')}
+                        {generateCells(17,2,5, () => 'X', editName)}
+                        {generateDynamicCells(editName, 17,6,7, usedEmployees, "NIGHT",'BAR')}
                     </tr>
                     <tr className="row-break">
                         <td colSpan={days.length + 2}></td>
@@ -182,7 +188,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                     <tr>
                         <td className="side">HOST</td>
                         <td>4:00-LC</td>
-                        {generateDynamicCells(19,1,7, "NIGHT",'HOST')}
+                        {generateDynamicCells(editName, 19,1,7, usedEmployees, "NIGHT",'HOST')}
                     </tr>
                     <tr>
                         <td className="row-break" colSpan={10}></td>
@@ -192,17 +198,17 @@ const Graph: React.FC<GraphProps> = ({ startDate, employees, fulltimeEmployees }
                         <th rowSpan={3}>TRAINEE</th>
                         <td className="side">SERVER</td>
                         <td>3:30-STAY</td>
-                        {generateCells(20,1,7, () => '')}
+                        {generateCells(20,1,7, () => '', editName)}
                     </tr>
                     <tr>
                         <td className="side">HOST</td>
                         <td>4:00-LC</td>
-                        {generateCells(21,1,7, () => '')}
+                        {generateCells(21,1,7, () => '', editName)}
                     </tr>
                     <tr>
                         <td className="side">BAR</td>
                         <td>3:30-STAY</td>
-                        {generateCells(22,1,7, () => '')}
+                        {generateCells(22,1,7, () => '', editName)}
                     </tr>
                 </tbody>
             </table>

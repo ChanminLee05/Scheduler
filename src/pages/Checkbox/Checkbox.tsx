@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
 import "./Checkbox.css";
-import {fulltimeEmployeeSchedule, employeeSchedule} from "../../entities/Employees";
+import {fulltimeEmployeeSchedule, employeeSchedule, Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 
-const Checkbox: React.FC = () => {
-    const [fullTimeEmployees, setFullTimeEmployees] = useState(fulltimeEmployeeSchedule);
-    const [partTimeEmployees, setPartTimeEmployees] = useState(employeeSchedule);
-    const [tempFullTimeEmployees, setTempFullTimeEmployees] = useState(fulltimeEmployeeSchedule);
-    const [tempPartTimeEmployees, setTempPartTimeEmployees] = useState(employeeSchedule);
+interface CheckboxProps {
+    fullTimeEmployees: Employees[];
+    partTimeEmployees: Employees[];
+    onAvailabilityChange: (updatedFullTimeEmployees: Employees[], updatedPartTimeEmployees: Employees[]) => void;
+}
+
+const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployees, onAvailabilityChange }) => {
+    const [tempFullTimeEmployees, setTempFullTimeEmployees] = useState(fullTimeEmployees);
+    const [tempPartTimeEmployees, setTempPartTimeEmployees] = useState(partTimeEmployees);
 
     const handleCheckboxChange = (employeeIndex: number, day: string, isFullTime: boolean) => (event: React.ChangeEvent<HTMLInputElement> | undefined) => {
         if (event) {
-            const { checked } = event.target as HTMLInputElement; // Type assertion
+            const { checked } = event.target as HTMLInputElement;
 
             const updateEmployeeAvailability = (employees: typeof fulltimeEmployeeSchedule | typeof employeeSchedule) => {
                 return employees.map((emp, index) => {
@@ -20,7 +24,7 @@ const Checkbox: React.FC = () => {
                             ? [...emp.availableDay, day]
                             : emp.availableDay.filter(d => d !== day);
 
-                        return { ...emp, availableDate: updatedDate };
+                        return { ...emp, availableDay: updatedDate };
                     }
                     return emp;
                 });
@@ -36,10 +40,10 @@ const Checkbox: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setFullTimeEmployees(tempFullTimeEmployees);
-        setPartTimeEmployees(tempPartTimeEmployees);
+        onAvailabilityChange(tempFullTimeEmployees, tempPartTimeEmployees);
+        console.log("TempFullEmp", tempFullTimeEmployees)
+        console.log("TempPartEmp", tempPartTimeEmployees)
     }
-
 
     return (
         <form className="checkbox-page" onSubmit={handleSubmit}>

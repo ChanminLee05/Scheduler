@@ -1,16 +1,47 @@
 import {Employees, employeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
 
-const getEmployeeAvailableDay = (day: string) => {
+const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<string, number>) => {
+    const employeeArray: string[] = [];
+    employees.forEach(employee => {
+        const usedShifts = usedEmployees[employee.name] || 0;
+        const remainingShifts = employee.maxShifts - usedShifts;
+
+        for (let i = 0; i < remainingShifts; i++) {
+            employeeArray.push(employee.name);
+        }
+    });
+
+    if (employeeArray.length === 0) {
+        return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * employeeArray.length);
+    const selectedEmployee = employeeArray[randomIndex];
+    employeeArray.splice(randomIndex, 1);
+
+    usedEmployees[selectedEmployee] = (usedEmployees[selectedEmployee] || 0) + 1;
+
+    return selectedEmployee;
+
+}
+
+export const getEmployeeAvailableDay = (day: string) => {
+    const fullTimeEmployees = fulltimeEmployeeSchedule.filter(employee => employee.availableDay.includes(day));
     const partTimeEmployees = employeeSchedule.filter(employee => employee.availableDay.includes(day));
-    const fullTimeEmployees = fulltimeEmployeeSchedule.filter(fullTimeEmployee => fullTimeEmployee.availableDay.includes(day));
-    return [...partTimeEmployees, ...fullTimeEmployees];
+    return [...fullTimeEmployees, ...partTimeEmployees];
 };
 
 const getEmployeeAvailableTime = (employees: Employees[], timeOfDay: "DAY" | "NIGHT") => {
     return employees.filter(employee => employee.availableTime.includes(timeOfDay));
 };
 
-export const assignToSchedule = (day: string, timeOfDay: "DAY" | "NIGHT", position?: string): string => {
+export const assignToSchedule = (
+    day: string,
+    timeOfDay: "DAY" | "NIGHT",
+    usedEmployees: Record<string, number>,
+    assignedEmployees: Record<string, Set<string>>,
+    position?: string,
+): string => {
     const availableEmployeesOnDay = getEmployeeAvailableDay(day);
     let availableEmployees: Employees[] = getEmployeeAvailableTime(availableEmployeesOnDay, timeOfDay);
 
@@ -18,46 +49,19 @@ export const assignToSchedule = (day: string, timeOfDay: "DAY" | "NIGHT", positi
         availableEmployees = availableEmployees.filter(employee => employee.availablePosition.includes(position));
     }
 
-    if (availableEmployees.length > 0) {
-        const randomIndex = Math.floor(Math.random() * availableEmployees.length);
-        const selectedEmployee = availableEmployees[randomIndex];
+    availableEmployees = availableEmployees.filter(employee => !assignedEmployees[day]?.has(employee.name));
 
-        if (selectedEmployee && selectedEmployee.name) {
-            return selectedEmployee.name;
-        } else {
-            return 'No valid employee available';
+    if (availableEmployees.length > 0) {
+        const selectedEmployeeName = getRandomEmployeeName(availableEmployees, usedEmployees);
+        if (selectedEmployeeName) {
+            assignedEmployees[day] = assignedEmployees[day] || new Set();
+            assignedEmployees[day].add(selectedEmployeeName);
         }
+
+        return selectedEmployeeName || 'No valid employee available';
     } else {
         return 'No employees available';
     }
-}
+};
 
-
-
-// export const assignToWeekend = (timeOfDay: "DAY" | "NIGHT", position?: string): string => {
-//     let availableEmployees: Employees[] = [];
-//
-//     if (timeOfDay === "DAY") {
-//         availableEmployees = getEmployeeAvailableDay;
-//     } else if (timeOfDay === "NIGHT") {
-//         availableEmployees = getEmployeeAvailableNight;
-//     }
-//
-//     if (position) {
-//         availableEmployees = availableEmployees.filter(employee => employee.availablePosition.includes(position));
-//     }
-//
-//     if (availableEmployees.length > 0) {
-//         const randomIndex = Math.floor(Math.random() * availableEmployees.length);
-//         const selectedEmployee = availableEmployees[randomIndex];
-//
-//         if (selectedEmployee && selectedEmployee.name) {
-//             return selectedEmployee.name;
-//         } else {
-//             return 'No valid employee available';
-//         }
-//     } else {
-//         return 'No employees available';
-//     }
-// }
 
