@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Checkbox.css";
 import {fulltimeEmployeeSchedule, partTimeEmployeeSchedule, Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
@@ -12,6 +12,20 @@ interface CheckboxProps {
 const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployees, onAvailabilityChange }) => {
     const [tempFullTimeEmployees, setTempFullTimeEmployees] = useState(fullTimeEmployees);
     const [tempPartTimeEmployees, setTempPartTimeEmployees] = useState(partTimeEmployees);
+    const [editingIndex, setEditingIndex] = useState<{ fullTime: number | null, partTime: number | null}>({ fullTime: null, partTime: null});
+    const [newName, setNewName] = useState<string>("");
+
+    useEffect(() => {
+        const savedFullTimeEmployees = localStorage.getItem("FullTimeEmployees");
+        const savedPartTimeEmployees = localStorage.getItem("PartTimeEmployees");
+
+        if (savedFullTimeEmployees) {
+            setTempFullTimeEmployees(JSON.parse(savedFullTimeEmployees));
+        }
+        if (savedPartTimeEmployees) {
+            setTempPartTimeEmployees(JSON.parse(savedPartTimeEmployees));
+        }
+    }, []);
 
     const handleCheckboxChange = (employeeIndex: number, day: string, isFullTime: boolean) => (event: React.ChangeEvent<HTMLInputElement> | undefined) => {
         if (event) {
@@ -42,6 +56,55 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
         }
     }
 
+    const handleEditClick = (empIndex: number, isFullTime: boolean) => {
+        const name = isFullTime
+            ? tempFullTimeEmployees[empIndex]?.name
+            : tempPartTimeEmployees[empIndex]?.name;
+
+        setEditingIndex({ fullTime: isFullTime ? empIndex: null, partTime: !isFullTime ? empIndex: null});
+        setNewName(name ?? "");
+    }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(e.target.value);
+    }
+
+    const handleNameSave = (empIndex: number, isFullTime: boolean) => {
+        const updateEmployeeName = (employees: Employees[]) => {
+            return employees.map((emp, index) => {
+                if (index === empIndex) {
+                    return { ...emp, name: newName};
+                }
+                return emp;
+            })
+        }
+
+        if (isFullTime) {
+            const updatedFullTimeEmployees = updateEmployeeName(tempFullTimeEmployees);
+            setTempFullTimeEmployees(updatedFullTimeEmployees);
+            localStorage.setItem("FullTimeEmployees", JSON.stringify(updatedFullTimeEmployees));
+        } else {
+            const updatedPartTimeEmployees = updateEmployeeName(tempPartTimeEmployees);
+            setTempPartTimeEmployees(updatedPartTimeEmployees);
+            localStorage.setItem("PartTimeEmployees", JSON.stringify(updatedPartTimeEmployees));
+        }
+
+        setEditingIndex({ fullTime: null, partTime: null});
+    }
+
+    const getEmployeeName = (empName: string, isFullTime: boolean): string => {
+        const savedEmployees = localStorage.getItem(isFullTime ? "FullTimeEmployees" : "PartTimeEmployees");
+
+        if (savedEmployees) {
+            const employees = JSON.parse(savedEmployees) as Employees[];
+            const employee = employees.find(emp => emp.name === empName);
+
+            if (employee) {
+                return employee.name;
+            }
+        }
+        return empName;
+    }
     const handleSubmit = () => {
         onAvailabilityChange(tempFullTimeEmployees, tempPartTimeEmployees);
     }
@@ -67,9 +130,20 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                 <tr>
                                     <td>
                                         <div className="name-btn-container">
-                                            <span className="emp-name">
-                                                {fullTimeEmployee.name}<i className="fa-solid fa-pen-to-square"></i>
-                                            </span>
+                                            {editingIndex.fullTime === empIndex ? (
+                                                <div className="edit-name-container">
+                                                    <input
+                                                        type="text"
+                                                        value={newName}
+                                                        onChange={handleNameChange}
+                                                    />
+                                                    <button type="button" onClick={() => handleNameSave(empIndex, true)}>Save</button>
+                                                </div>
+                                            ) : (
+                                                <span className="emp-name">
+                                                    {getEmployeeName(fullTimeEmployee.name, true)}<i className="fa-solid fa-pen-to-square" onClick={() => handleEditClick(empIndex, true)}></i>
+                                                </span>
+                                            )}
                                             <button type="button" className="remove-btn">
                                                 <i className="fa-solid fa-circle-minus"></i>
                                             </button>
