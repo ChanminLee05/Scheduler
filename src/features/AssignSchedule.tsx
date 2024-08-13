@@ -18,7 +18,6 @@ const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<str
     const randomIndex = Math.floor(Math.random() * employeeArray.length);
     const selectedEmployee = employeeArray[randomIndex];
     employeeArray.splice(randomIndex, 1);
-
     usedEmployees[selectedEmployee] = (usedEmployees[selectedEmployee] || 0) + 1;
 
     return selectedEmployee;
@@ -41,7 +40,9 @@ export const assignToSchedule = (
     usedEmployees: Record<string, number>,
     assignedEmployees: Record<string, Set<string>>,
     position?: string,
+    columnIndex?: number
 ): string => {
+    const excludeNames = ["YUNSEON", "HYOBIN", "WILL"];
     const availableEmployeesOnDay = getEmployeeAvailableDay(day);
     let availableEmployees: Employees[] = getEmployeeAvailableTime(availableEmployeesOnDay, timeOfDay);
 
@@ -51,13 +52,16 @@ export const assignToSchedule = (
 
     availableEmployees = availableEmployees.filter(employee => !assignedEmployees[day]?.has(employee.name));
 
+    if (columnIndex === 1 || columnIndex === 7) {
+        availableEmployees = availableEmployees.filter(employee => !excludeNames.includes(employee.name));
+    }
+
     if (availableEmployees.length > 0) {
         const selectedEmployeeName = getRandomEmployeeName(availableEmployees, usedEmployees);
         if (selectedEmployeeName) {
             assignedEmployees[day] = assignedEmployees[day] || new Set();
             assignedEmployees[day].add(selectedEmployeeName);
         }
-
         return selectedEmployeeName || 'No valid employee available';
     } else {
         return 'No employees available';

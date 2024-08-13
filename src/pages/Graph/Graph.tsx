@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import "./Graph.css";
-import {Employees} from "../../entities/Employees";
+import {Employees, employeeSchedule} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 import {getDate, formatDay, isHoliday} from "../../features/TimeController";
 import {useEditName} from "../../features/UseEditName";
 import {generateCells, generateDynamicCells } from "../../features/CellUtills";
+import {lunchShift, dinnerShift, trainningShift} from "../../entities/Rows";
 
 interface GraphProps {
     startDate: string | null;
@@ -83,46 +84,50 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td className="schedule">3:30-CUT</td>
                         <td className="schedule">11:00-CUT</td>
                     </tr>
-                    <tr>
-                        <th rowSpan={6}>Lunch</th>
-                        <td className="side">A</td>
-                        <td>11:00-3:30</td>
-                        <td className="schedule editable">{editName(2,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateCells(2,2,6, () => '', editName)}
-                        <td className="schedule editable">{editName(2,7,hyobin?.name  + "(D)"|| '')}</td>
-                    </tr>
-                    <tr>
-                        <td className="side">B</td>
-                        <td>11:00-3:30</td>
-                        {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B')}
-                        {generateCells(3,2,6, () => '', editName)}
-                        {generateDynamicCells(editName, 3,6,6, usedEmployees, "DAY",'B')}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>11:00-3:30</td>
-                        <td className="schedule editable">{editName(4,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateCells(4,2,6, () => '', editName)}
-                        <td className="schedule editable">{editName(4,7,yunseon?.name + "(D)" || '')}</td>
-                    </tr>
-                    <tr>
-                        <td className="side">A</td>
-                        <td>12:30-4:30</td>
-                        {generateCells(5,1,7, () => '', editName)}
-                    </tr>
-                    <tr>
-                        <td className="side">B</td>
-                        <td>12:30-4:30</td>
-                        {generateCells(6,1,7, () => '', editName)}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>12:30-4:30</td>
-                        {generateCells(7,1,7, () => '', editName)}
-                    </tr>
+                    {lunchShift.map((shift, index) => (
+                        <React.Fragment key={index}>
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${index}-${posIndex}-1`}>
+                                    {posIndex === 0 && <th rowSpan={6}>{shift.shift}</th>}
+                                    <td className="side">{position}</td>
+                                    <td>{shift.shiftTime[0]}</td>
+                                    {posIndex === 0 && (
+                                        <>
+                                            {generateCells(2,1,1, () => shift.employees[0][0] || '', editName)}
+                                            {generateCells(2,2,6, () => '', editName)}
+                                            {generateCells(2,7,7, () => shift.employees[0][1] || '', editName)}
+                                        </>
+                                    )}
+                                    {posIndex === 1 && (
+                                        <>
+                                            {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B') }
+                                            {generateCells(3,2,6, () => '', editName)}
+                                            {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B') }
+                                        </>
+                                    )}
+                                    {posIndex === 2 && (
+                                        <>
+                                            {generateCells(4,1,1, () => shift.employees[0][1] || '', editName)}
+                                            {generateCells(4,2,6, () => '', editName)}
+                                            {generateCells(4,7,7, () => shift.employees[0][0] || '', editName)}
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${index}-${posIndex}-2`}>
+                                    <td className="side">{position}</td>
+                                    <td>{shift.shiftTime[1]}</td>
+                                    {generateCells(3,1,7, () => '', editName)}
+                                </tr>
+                            ))}
+                        </React.Fragment>
+                    ))}
+
                     <tr className="row-break">
                         <td colSpan={days.length + 3}></td>
                     </tr>
+
                     {/*dinner*/}
                     <tr>
                         <th rowSpan={11}>Dinner</th>
