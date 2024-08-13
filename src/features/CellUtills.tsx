@@ -1,6 +1,7 @@
 import {days} from "../entities/Date";
 import {assignToSchedule} from "./AssignSchedule";
 import React, {useState} from "react";
+
 export const generateCells = (
     rowIndex: number,
     startCellIndex: number,
@@ -59,9 +60,7 @@ export const generateDynamicCells = (
             return "Invalid time of day";
         }
 
-        const columnIndex = cellIndex;
-
-        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, assignedEmployees, position, columnIndex);
+        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, assignedEmployees, position, cellIndex);
     };
 
     return generateCells(rowIndex, startCellIndex, endCellIndex, getEmployeeNameForCell, editName);

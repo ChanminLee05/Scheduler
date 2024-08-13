@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import "./Checkbox.css";
-import {fulltimeEmployeeSchedule, employeeSchedule, Employees} from "../../entities/Employees";
+import {fulltimeEmployeeSchedule, partTimeEmployeeSchedule, Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 
 interface CheckboxProps {
@@ -17,7 +17,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
         if (event) {
             const { checked } = event.target as HTMLInputElement;
 
-            const updateEmployeeAvailability = (employees: typeof fulltimeEmployeeSchedule | typeof employeeSchedule) => {
+            const updateEmployeeAvailability = (employees: typeof fulltimeEmployeeSchedule | typeof partTimeEmployeeSchedule) => {
                 return employees.map((emp, index) => {
                     if (index === employeeIndex) {
                         const updatedDate = checked
@@ -31,18 +31,19 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
             };
 
             if (isFullTime) {
-                setTempFullTimeEmployees(updateEmployeeAvailability(tempFullTimeEmployees));
+                const updatedFullTimeEmployees = updateEmployeeAvailability(tempFullTimeEmployees);
+                setTempFullTimeEmployees(updatedFullTimeEmployees);
+                localStorage.setItem("FullTimeEmployees", JSON.stringify(updatedFullTimeEmployees));
             } else {
-                setTempPartTimeEmployees(updateEmployeeAvailability(tempPartTimeEmployees));
+                const updatedPartTimeEmployees = updateEmployeeAvailability(tempPartTimeEmployees);
+                setTempPartTimeEmployees(updatedPartTimeEmployees);
+                localStorage.setItem("PartTimeEmployees", JSON.stringify(updatedPartTimeEmployees));
             }
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         onAvailabilityChange(tempFullTimeEmployees, tempPartTimeEmployees);
-        console.log("TempFullEmp", tempFullTimeEmployees)
-        console.log("TempPartEmp", tempPartTimeEmployees)
     }
 
     return (
@@ -61,7 +62,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                 Full-Time Employees
                             </td>
                         </tr>
-                        {fulltimeEmployeeSchedule.map((fullTimeEmployee, empIndex) => (
+                        {tempFullTimeEmployees.map((fullTimeEmployee, empIndex) => (
                             <React.Fragment key={empIndex}>
                                 <tr>
                                     <td>
@@ -82,7 +83,21 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                                     <input className="inp-cbx"
                                                            id={checkboxId}
                                                            type="checkbox"
-                                                           defaultChecked={fullTimeEmployee.availableDay.includes(day)}
+                                                           defaultChecked={
+                                                               (() => {
+                                                                   const savedFullTimeEmployees = localStorage.getItem("FullTimeEmployees");
+
+                                                                   if (savedFullTimeEmployees) {
+                                                                       const fullTimeEmployees = JSON.parse(savedFullTimeEmployees) as typeof fulltimeEmployeeSchedule;
+                                                                       const employee = fullTimeEmployees.find(emp => emp.name === fullTimeEmployee.name);
+
+                                                                       if (employee) {
+                                                                           return employee.availableDay.includes(day)
+                                                                       }
+                                                                   }
+                                                                   return fullTimeEmployee.availableDay.includes(day);
+                                                               })()
+                                                           }
                                                            onChange={handleCheckboxChange(empIndex, day, true)}
                                                     />
                                                     <label className="cbx" htmlFor={checkboxId}>
@@ -114,13 +129,13 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                 Part-Time Employees
                             </td>
                         </tr>
-                        {employeeSchedule.map((employee, empIndex) => (
+                        {tempPartTimeEmployees.map((partTimeEmployee, empIndex) => (
                             <React.Fragment key={empIndex}>
                                 <tr>
                                     <td>
                                         <div className="name-btn-container">
                                             <span className="emp-name">
-                                                {employee.name}<i className="fa-solid fa-pen-to-square"></i>
+                                                {partTimeEmployee.name}<i className="fa-solid fa-pen-to-square"></i>
                                             </span>
                                             <button type="button" className="remove-btn">
                                                 <i className="fa-solid fa-circle-minus"></i>
@@ -135,7 +150,21 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                                     <input className="inp-cbx"
                                                            id={checkboxId}
                                                            type="checkbox"
-                                                           defaultChecked={employee.availableDay.includes(day)}
+                                                           defaultChecked={
+                                                               (() => {
+                                                                   const savedPartTimeEmployees = localStorage.getItem("PartTimeEmployees");
+
+                                                                   if (savedPartTimeEmployees) {
+                                                                       const partTimeEmployees = JSON.parse(savedPartTimeEmployees) as typeof partTimeEmployeeSchedule;
+                                                                       const employee = partTimeEmployees.find(emp => emp.name === partTimeEmployee.name);
+
+                                                                       if (employee) {
+                                                                           return employee.availableDay.includes(day)
+                                                                       }
+                                                                   }
+                                                                   return partTimeEmployee.availableDay.includes(day);
+                                                               })()
+                                                           }
                                                            onChange={handleCheckboxChange(empIndex, day, false)}
                                                     />
                                                     <label className="cbx" htmlFor={checkboxId}>

@@ -11,7 +11,7 @@ export const fulltimeEmployeeSchedule: Employees[] = [
     { name: "HYOBIN", availableDay: ["SUN", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 5},
     { name: "YUNSEON", availableDay: ["SUN", "MON", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 5},
 ]
-export const employeeSchedule: Employees[] =[
+export const partTimeEmployeeSchedule: Employees[] =[
     { name: "LEO", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 3},
     { name: "NAEUN", availableDay: ["SUN", "MON", "TUE", "THU", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 3},
     { name: "CHANMIN", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 4},

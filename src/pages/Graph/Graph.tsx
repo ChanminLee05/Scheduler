@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import "./Graph.css";
-import {Employees, employeeSchedule} from "../../entities/Employees";
+import {Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 import {getDate, formatDay, isHoliday} from "../../features/TimeController";
 import {useEditName} from "../../features/UseEditName";
 import {generateCells, generateDynamicCells } from "../../features/CellUtills";
-import {lunchShift, dinnerShift, trainningShift} from "../../entities/Rows";
+import {lunchShift, dinnerShift, trainingShift, hostShift} from "../../entities/Shifts";
 
 interface GraphProps {
     startDate: string | null;
@@ -84,18 +84,20 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td className="schedule">3:30-CUT</td>
                         <td className="schedule">11:00-CUT</td>
                     </tr>
-                    {lunchShift.map((shift, index) => (
-                        <React.Fragment key={index}>
+
+                    {/*Lunch*/}
+                    {lunchShift.map((shift, lunchIndex) => (
+                        <React.Fragment key={lunchIndex}>
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${index}-${posIndex}-1`}>
+                                <tr key={`${lunchIndex}-${posIndex}-1`}>
                                     {posIndex === 0 && <th rowSpan={6}>{shift.shift}</th>}
                                     <td className="side">{position}</td>
                                     <td>{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateCells(2,1,1, () => shift.employees[0][0] || '', editName)}
+                                            {generateCells(2,1,1, () => shift.employees[0] || '', editName)}
                                             {generateCells(2,2,6, () => '', editName)}
-                                            {generateCells(2,7,7, () => shift.employees[0][1] || '', editName)}
+                                            {generateCells(2,7,7, () => shift.employees[1] || '', editName)}
                                         </>
                                     )}
                                     {posIndex === 1 && (
@@ -107,18 +109,18 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateCells(4,1,1, () => shift.employees[0][1] || '', editName)}
+                                            {generateCells(4,1,1, () => shift.employees[1] || '', editName)}
                                             {generateCells(4,2,6, () => '', editName)}
-                                            {generateCells(4,7,7, () => shift.employees[0][0] || '', editName)}
+                                            {generateCells(4,7,7, () => shift.employees[0] || '', editName)}
                                         </>
                                     )}
                                 </tr>
                             ))}
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${index}-${posIndex}-2`}>
+                                <tr key={`${lunchIndex}-${posIndex}-2`}>
                                     <td className="side">{position}</td>
                                     <td>{shift.shiftTime[1]}</td>
-                                    {generateCells(3,1,7, () => '', editName)}
+                                    {generateCells(5,1,7, () => '', editName)}
                                 </tr>
                             ))}
                         </React.Fragment>
@@ -129,92 +131,145 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     </tr>
 
                     {/*dinner*/}
-                    <tr>
-                        <th rowSpan={11}>Dinner</th>
-                        <td className="side">A</td>
-                        <td>3:30-1st CUT</td>
-                        <td className="schedule editable">{editName(9,1,yunseon?.name + "(D)" || '')}</td>
-                        {generateDynamicCells(editName, 9,2,6, usedEmployees, "NIGHT", 'A')}
-                        <td className="schedule editable">{editName(9,7,hyobin?.name + "(D)" || '')}</td>
-                    </tr>
-                    <tr>
-                        <td className="side">B</td>
-                        <td>3:30-1st CUT</td>
-                        {generateDynamicCells(editName, 10,1,7, usedEmployees, "NIGHT",'B')}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>3:30-1st CUT</td>
-                        <td className="schedule editable">{editName(11,1,hyobin?.name + "(D)" || '')}</td>
-                        {generateDynamicCells(editName, 11,2,6, usedEmployees, "NIGHT",'BAR')}
-                        <td className="schedule editable">{editName(11,7,yunseon?.name + "(D)" || '')}</td>
-                    </tr>
-                    <tr>
-                        <td className="side">A</td>
-                        <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(editName, 12,1,1, usedEmployees, "NIGHT",'A')}
-                        {generateCells(12,2,4, () => 'X', editName)}
-                        {generateDynamicCells(editName, 12,5,7, usedEmployees, "NIGHT",'A')}
-                    </tr>
-                    <tr>
-                        <td className="side">B</td>
-                        <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(editName, 13,1,7, usedEmployees, "NIGHT",'B')}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>4:30-2nd CUT</td>
-                        {generateDynamicCells(editName, 14,1,7, usedEmployees, "NIGHT",'BAR')}
-                    </tr>
-                    <tr>
-                        <td className="side">A</td>
-                        <td>5:30-STAY</td>
-                        {generateDynamicCells(editName, 15,1,4, usedEmployees, "NIGHT",'A')}
-                        {generateCells(15,5,5, () => 'X', editName)}
-                        {generateDynamicCells(editName, 15,6,7, usedEmployees, "NIGHT",'A')}
-                    </tr>
-                    <tr>
-                        <td className="side">B</td>
-                        <td>5:30-STAY</td>
-                        {generateDynamicCells(editName, 16,1,1, usedEmployees, "NIGHT",'B')}
-                        {generateCells(16,2,5, () => 'X', editName)}
-                        {generateDynamicCells(editName, 16,6,7, usedEmployees, "NIGHT",'B')}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>5:30-STAY</td>
-                        {generateDynamicCells(editName, 17,1,1, usedEmployees, "NIGHT",'BAR')}
-                        {generateCells(17,2,5, () => 'X', editName)}
-                        {generateDynamicCells(editName, 17,6,7, usedEmployees, "NIGHT",'BAR')}
-                    </tr>
-                    <tr className="row-break">
-                        <td colSpan={days.length + 2}></td>
-                    </tr>
-                    <tr>
-                        <td className="side">HOST</td>
-                        <td>4:00-LC</td>
-                        {generateDynamicCells(editName, 19,1,7, usedEmployees, "NIGHT",'HOST')}
-                    </tr>
-                    <tr>
-                        <td className="row-break" colSpan={10}></td>
-                    </tr>
-                {/*Training*/}
-                    <tr>
-                        <th rowSpan={3}>TRAINEE</th>
-                        <td className="side">SERVER</td>
-                        <td>3:30-STAY</td>
-                        {generateCells(20,1,7, () => '', editName)}
-                    </tr>
-                    <tr>
-                        <td className="side">HOST</td>
-                        <td>4:00-LC</td>
-                        {generateCells(21,1,7, () => '', editName)}
-                    </tr>
-                    <tr>
-                        <td className="side">BAR</td>
-                        <td>3:30-STAY</td>
-                        {generateCells(22,1,7, () => '', editName)}
-                    </tr>
+                    {dinnerShift.map((shift, dinnerIndex) => (
+                        <React.Fragment key={dinnerIndex}>
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${dinnerIndex}-${posIndex}-1`}>
+                                    {posIndex === 0 && <th rowSpan={11}>{shift.shift}</th>}
+                                    <td className="side">{position}</td>
+                                    <td>{shift.shiftTime[0]}</td>
+                                    {posIndex === 0 && (
+                                        <>
+                                            {generateCells(6,1,1, () => shift.employees[0] || '', editName)}
+                                            {generateDynamicCells(editName, 6,2,4, usedEmployees, "NIGHT",'A') }
+                                            {generateCells(6,5,5, () => shift.employees[3] || '', editName)}
+                                            {generateDynamicCells(editName, 6,6,6, usedEmployees, "NIGHT",'A') }
+                                            {generateCells(6,7,7, () => shift.employees[1] || '', editName)}
+                                        </>
+                                    )}
+                                    {posIndex === 1 && (
+                                        <>
+                                            {generateDynamicCells(editName, 7,1,1, usedEmployees, "NIGHT",'B') }
+                                            {generateCells(7,2,2, () => shift.employees[2] || '', editName)}
+                                            {generateDynamicCells(editName, 7,3,5, usedEmployees, "NIGHT",'B') }
+                                            {generateCells(7,6,6, () => shift.employees[2] || '', editName)}
+                                            {generateDynamicCells(editName, 7,7,7, usedEmployees, "NIGHT",'B') }
+                                        </>
+                                    )}
+                                    {posIndex === 2 && (
+                                        <>
+                                            {generateCells(8,1,1, () => shift.employees[1] || '', editName)}
+                                            {generateDynamicCells(editName, 8,2,3, usedEmployees, "NIGHT",'BAR') }
+                                            {generateCells(8,4,4, () => shift.employees[3] || '', editName)}
+                                            {generateCells(8,5,5, () => shift.employees[2] || '', editName)}
+                                            {generateCells(8,6,6, () => shift.employees[3] || '', editName)}
+                                            {generateCells(8,7,7, () => shift.employees[0] || '', editName)}
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${dinnerIndex}-${posIndex}-2`}>
+                                    <td className="side">{position}</td>
+                                    <td>{shift.shiftTime[1]}</td>
+                                    {posIndex === 0 && (
+                                        <>
+                                            {generateDynamicCells(editName, 9,1,1, usedEmployees, "NIGHT",'A')}
+                                            {generateCells(9,2,4, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 9,5,7, usedEmployees, "NIGHT",'A')}
+                                        </>
+                                    )}
+                                    {posIndex === 1 && (
+                                        <>
+                                            {generateDynamicCells(editName, 10,1,7, usedEmployees, "NIGHT",'B')}
+                                        </>
+                                    )}
+                                    {posIndex === 2 && (
+                                        <>
+                                            {generateDynamicCells(editName, 11,1,7, usedEmployees, "NIGHT",'BAR')}
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${dinnerIndex}-${posIndex}-2`}>
+                                    <td className="side">{position}</td>
+                                    <td>{shift.shiftTime[2]}</td>
+                                    {posIndex === 0 && (
+                                        <>
+                                            {generateDynamicCells(editName, 12,1,4, usedEmployees, "NIGHT",'A')}
+                                            {generateCells(12,5,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 12,6,7, usedEmployees, "NIGHT",'A')}
+                                        </>
+                                    )}
+                                    {posIndex === 1 && (
+                                        <>
+                                            {generateDynamicCells(editName, 13,1,1, usedEmployees, "NIGHT",'B')}
+                                            {generateCells(13,2,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 13,6,7, usedEmployees, "NIGHT",'B')}
+                                        </>
+                                    )}
+                                    {posIndex === 2 && (
+                                        <>
+                                            {generateDynamicCells(editName, 14,1,1, usedEmployees, "NIGHT",'BAR')}
+                                            {generateCells(14,2,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 14,6,7, usedEmployees, "NIGHT",'BAR')}
+                                        </>
+                                    )}
+                                </tr>
+
+                            ))}
+
+                            <tr className="row-break">
+                                <td colSpan={days.length + 2}></td>
+                            </tr>
+
+                            {/*Host*/}
+                            {hostShift.map((shift, hostIndex) => (
+                                <React.Fragment key={hostIndex}>
+                                    {shift.position.map((position, posIndex) => (
+                                        <tr key={`${hostIndex}-${posIndex}-1`}>
+                                            <td className="side">{position}</td>
+                                            <td>{shift.shiftTime[0]}</td>
+                                            {posIndex === 0 && (
+                                                <>
+                                                    {generateDynamicCells(editName, 15,1,7, usedEmployees, "NIGHT",'HOST')}
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                        </React.Fragment>
+                    ))}
+
+                            {/*Training*/}
+                            {trainingShift.map((shift, trainningIndex) => (
+                                <React.Fragment key={trainningIndex}>
+                                    {shift.position.map((position, posIndex) => (
+                                        <tr key={`${trainningIndex}-${posIndex}-1`}>
+                                            {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
+                                            <td className="side">{position}</td>
+                                            <td>{shift.shiftTime[0]}</td>
+                                            {posIndex === 0 && (
+                                                <>
+                                                    {generateCells(16,1,7, () => '', editName)}
+                                                </>
+                                            )}
+                                            {posIndex === 1 && (
+                                                <>
+                                                    {generateCells(17,1,7, () => '', editName)}
+                                                </>
+                                            )}
+                                            {posIndex === 2 && (
+                                                <>
+                                                    {generateCells(18,1,7, () => '', editName)}
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))}
+                                </React.Fragment>
+                            ))}
                 </tbody>
             </table>
         </div>
