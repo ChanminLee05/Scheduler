@@ -59,7 +59,9 @@ export const generateDynamicCells = (
             return "Invalid time of day";
         }
 
-        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, assignedEmployees, position);
+        const columnIndex = cellIndex;
+
+        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, assignedEmployees, position, columnIndex);
     };
 
     return generateCells(rowIndex, startCellIndex, endCellIndex, getEmployeeNameForCell, editName);

@@ -1,26 +1,32 @@
 export interface Shift {
-    label: string;
-    sideLabels: string[];
-    shifts: string[];
-    editableCells: number[];
+    shift: string;
+    position: string[];
+    shiftTime: string[];
+    employees: string[][];
 }
-export const rows: Shift[] = [
+
+export const lunchShift: Shift[] = [
     {
-        label: 'Lunch',
-        sideLabels: ['A', 'B', 'BAR'],
-        shifts: ['11:00-3:30', '12:30-4:30'],
-        editableCells: Array.from({ length: 7 }, (_, i) => i + 1)
-    },
-    {
-        label: 'Dinner',
-        sideLabels: ['A', 'B', 'BAR'],
-        shifts: ['3:30-1st CUT', '4:30-2nd CUT', '5:30-STAY'],
-        editableCells: Array.from({ length: 7 }, (_, i) => i + 1)
-    },
-    {
-        label: 'Training',
-        sideLabels: ['SERVER', 'HOST', 'BAR'],
-        shifts: ['3:30-STAY', '4:00-LC'],
-        editableCells: Array.from({ length: 7 }, (_, i) => i + 1)
+        shift: 'Lunch',
+        position: ['A', 'B', 'BAR'],
+        shiftTime: ['11:00-3:30', '12:30-4:30'],
+        employees: [["YUNSEON(D)", "HYOBIN(D)"], ["HYOBIN(D)", "YUNSEON(D)"]],
     }
-];
+]
+
+export const dinnerShift: Omit<Shift, "employees">[] = [
+    {
+        shift: 'Dinner',
+        position: ['A', 'B', 'BAR'],
+        shiftTime: ['3:30-1st CUT', '4:30-2nd CUT', '5:30-STAY'],
+
+    }
+]
+
+export const trainningShift: Omit<Shift, "employees">[] = [
+    {
+        shift: 'Training',
+        position: ['SERVER', 'HOST', 'BAR'],
+        shiftTime: ['3:30-STAY', '4:00-LC'],
+    }
+]
