@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import "./Main.css";
 import Graph from "./Graph/Graph";
-import {Employees, employeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
+import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
 import Checkbox from "./Checkbox/Checkbox";
 
 
 const Main: React.FC = () => {
     const [startDate, setStartDate] = useState<string | null>("N/A");
     const [fullTimeEmployees, setFullTimeEmployees] = useState(fulltimeEmployeeSchedule);
-    const [partTimeEmployees, setPartTimeEmployees] = useState(employeeSchedule);
+    const [partTimeEmployees, setPartTimeEmployees] = useState(partTimeEmployeeSchedule);
     const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStartDate(e.target.value);
     }

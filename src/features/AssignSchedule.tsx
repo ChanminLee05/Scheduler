@@ -1,4 +1,4 @@
-import {Employees, employeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
+import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
 
 const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<string, number>) => {
     const employeeArray: string[] = [];
@@ -26,7 +26,7 @@ const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<str
 
 export const getEmployeeAvailableDay = (day: string) => {
     const fullTimeEmployees = fulltimeEmployeeSchedule.filter(employee => employee.availableDay.includes(day));
-    const partTimeEmployees = employeeSchedule.filter(employee => employee.availableDay.includes(day));
+    const partTimeEmployees = partTimeEmployeeSchedule.filter(employee => employee.availableDay.includes(day));
     return [...fullTimeEmployees, ...partTimeEmployees];
 };
 
@@ -40,9 +40,10 @@ export const assignToSchedule = (
     usedEmployees: Record<string, number>,
     assignedEmployees: Record<string, Set<string>>,
     position?: string,
-    columnIndex?: number
+    columnIndex?: number,
 ): string => {
-    const excludeNames = ["YUNSEON", "HYOBIN", "WILL"];
+    const excludeFullTimeNames = ["YUNSEON", "HYOBIN", "WILL"];
+
     const availableEmployeesOnDay = getEmployeeAvailableDay(day);
     let availableEmployees: Employees[] = getEmployeeAvailableTime(availableEmployeesOnDay, timeOfDay);
 
@@ -52,8 +53,8 @@ export const assignToSchedule = (
 
     availableEmployees = availableEmployees.filter(employee => !assignedEmployees[day]?.has(employee.name));
 
-    if (columnIndex === 1 || columnIndex === 7) {
-        availableEmployees = availableEmployees.filter(employee => !excludeNames.includes(employee.name));
+    if (columnIndex && columnIndex >= 1 && columnIndex <= 7) {
+        availableEmployees = availableEmployees.filter(employee => !excludeFullTimeNames.includes(employee.name));
     }
 
     if (availableEmployees.length > 0) {
