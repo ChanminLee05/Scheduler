@@ -29,5 +29,5 @@ export const partTimeEmployeeSchedule: Employees[] =[
     { name: "GRACE", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 2},
     { name: "YOONSUNG", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 2},
     { name: "HAN", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 2},
-    { name: "GAON", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 2}
+    { name: "GAON", availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["BAR"], maxShifts: 2}
 ]

@@ -2,7 +2,14 @@ import React, {useEffect, useState} from 'react';
 import "./Checkbox.css";
 import {fulltimeEmployeeSchedule, partTimeEmployeeSchedule, Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
-import {getEmployeeName, handleCheckboxChange, handleNameSave, handleSubmit} from "../../features/CheckboxUtils";
+import {
+    addEmployee,
+    getEmployeeName,
+    handleCheckboxChange,
+    handleNameSave,
+    handleSubmit,
+    isDayChecked, removeEmployee
+} from "../../features/CheckboxUtils";
 
 interface CheckboxProps {
     fullTimeEmployees: Employees[];
@@ -27,7 +34,29 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
         }
     }, []);
 
+    const handleRemoveEmployee = (empIndex: number, isFullTime: boolean) => {
+        if (isFullTime) {
+            removeEmployee(empIndex, tempFullTimeEmployees, setTempFullTimeEmployees, "FullTimeEmployees");
+        } else {
+            removeEmployee(empIndex, tempPartTimeEmployees, setTempPartTimeEmployees, "PartTimeEmployees");
+        }
+    };
 
+    const handleAddEmployee = (isFullTime: boolean) => {
+        const defaultEmployee: Employees = {
+            name: "NEW EMPLOYEE",
+            availableDay: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+            availableTime: ["DAY", "NIGHT"],
+            availablePosition: ["A", "B", "BAR"],
+            maxShifts: 2
+        };
+
+        if (isFullTime) {
+            addEmployee(tempFullTimeEmployees, setTempFullTimeEmployees, "FullTimeEmployees", defaultEmployee);
+        } else {
+            addEmployee(tempPartTimeEmployees, setTempPartTimeEmployees, "PartTimeEmployees", defaultEmployee);
+        }
+    };
 
     return (
         <form className="checkbox-page" onSubmit={() => handleSubmit(tempFullTimeEmployees, tempPartTimeEmployees, onAvailabilityChange)}>
@@ -53,7 +82,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                             <span className="emp-name" onClick={() => handleNameSave(empIndex, true, tempFullTimeEmployees, tempPartTimeEmployees, setTempFullTimeEmployees, setTempPartTimeEmployees, setEditingIndex)}>
                                                 {getEmployeeName(fullTimeEmployee.name, true)}<i className="fa-solid fa-pen-to-square"></i>
                                             </span>
-                                            <button type="button" className="remove-btn">
+                                            <button type="button" className="remove-btn" onClick={() => handleRemoveEmployee(empIndex, true)}>
                                                 <i className="fa-solid fa-circle-minus"></i>
                                             </button>
                                         </div>
@@ -66,21 +95,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                                     <input className="inp-cbx"
                                                            id={checkboxId}
                                                            type="checkbox"
-                                                           defaultChecked={
-                                                               (() => {
-                                                                   const savedFullTimeEmployees = localStorage.getItem("FullTimeEmployees");
-
-                                                                   if (savedFullTimeEmployees) {
-                                                                       const fullTimeEmployees = JSON.parse(savedFullTimeEmployees) as typeof fulltimeEmployeeSchedule;
-                                                                       const employee = fullTimeEmployees.find(emp => emp.name === fullTimeEmployee.name);
-
-                                                                       if (employee) {
-                                                                           return employee.availableDay.includes(day)
-                                                                       }
-                                                                   }
-                                                                   return fullTimeEmployee.availableDay.includes(day);
-                                                               })()
-                                                           }
+                                                           defaultChecked={isDayChecked(fullTimeEmployee.name, day, true)}
                                                            onChange={handleCheckboxChange(empIndex, day, true, tempFullTimeEmployees, tempPartTimeEmployees, setTempFullTimeEmployees, setTempPartTimeEmployees)}
                                                     />
                                                     <label className="cbx" htmlFor={checkboxId}>
@@ -102,7 +117,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                         ))}
                         <tr>
                             <td colSpan={days.length + 1}>
-                                <button type="button" className="add-btn">
+                                <button type="button" className="add-btn" onClick={() => handleAddEmployee(true)}>
                                     <i className="fa-solid fa-plus"></i>
                                 </button>
                             </td>
@@ -120,7 +135,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                             <span className="emp-name" onClick={() => handleNameSave(empIndex, false, tempFullTimeEmployees, tempPartTimeEmployees, setTempFullTimeEmployees, setTempPartTimeEmployees, setEditingIndex)}>
                                                 {getEmployeeName(partTimeEmployee.name, true)}<i className="fa-solid fa-pen-to-square"></i>
                                             </span>
-                                            <button type="button" className="remove-btn">
+                                            <button type="button" className="remove-btn" onClick={() => handleRemoveEmployee(empIndex, false)}>
                                                 <i className="fa-solid fa-circle-minus"></i>
                                             </button>
                                         </div>
@@ -133,21 +148,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                                                     <input className="inp-cbx"
                                                            id={checkboxId}
                                                            type="checkbox"
-                                                           defaultChecked={
-                                                               (() => {
-                                                                   const savedPartTimeEmployees = localStorage.getItem("PartTimeEmployees");
-
-                                                                   if (savedPartTimeEmployees) {
-                                                                       const partTimeEmployees = JSON.parse(savedPartTimeEmployees) as typeof partTimeEmployeeSchedule;
-                                                                       const employee = partTimeEmployees.find(emp => emp.name === partTimeEmployee.name);
-
-                                                                       if (employee) {
-                                                                           return employee.availableDay.includes(day)
-                                                                       }
-                                                                   }
-                                                                   return partTimeEmployee.availableDay.includes(day);
-                                                               })()
-                                                           }
+                                                           defaultChecked={isDayChecked(partTimeEmployee.name, day, false)}
                                                            onChange={handleCheckboxChange(empIndex, day, false, tempFullTimeEmployees, tempPartTimeEmployees, setTempFullTimeEmployees, setTempPartTimeEmployees)}
                                                     />
                                                     <label className="cbx" htmlFor={checkboxId}>
@@ -169,7 +170,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fullTimeEmployees, partTimeEmployee
                         ))}
                         <tr>
                             <td colSpan={days.length + 1}>
-                                <button type="button" className="add-btn">
+                                <button type="button" className="add-btn" onClick={() => handleAddEmployee(false)}>
                                     <i className="fa-solid fa-plus"></i>
                                 </button>
                             </td>
