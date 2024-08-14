@@ -1,6 +1,22 @@
 import {Employees} from "../entities/Employees";
 import React from "react";
 
+export const isDayChecked = (empName: string, day: string, isFullTime: boolean): boolean => {
+    const savedEmployeesKey = isFullTime ? "FullTimeEmployees" : "PartTimeEmployees";
+    const savedEmployees = localStorage.getItem(savedEmployeesKey);
+
+    if (savedEmployees) {
+        const employees = JSON.parse(savedEmployees) as Employees[];
+        const employee = employees.find(emp => emp.name === empName);
+
+        if (employee) {
+            return employee.availableDay.includes(day);
+        }
+    }
+
+    return false;
+}
+
 export const handleCheckboxChange = (
     employeeIndex: number,
     day: string,
@@ -94,3 +110,25 @@ export const handleSubmit = (
 ) => {
     onAvailabilityChange(tempFullTimeEmployees, tempPartTimeEmployees);
 };
+
+export const removeEmployee = (
+    empIndex: number,
+    employees: Employees[],
+    setEmployees: React.Dispatch<React.SetStateAction<Employees[]>>,
+    localStorageKey: string
+) => {
+    const updatedEmployees = employees.filter((_, index) => index !== empIndex);
+    setEmployees(updatedEmployees);
+    localStorage.setItem(localStorageKey, JSON.stringify(updatedEmployees));
+}
+
+export const addEmployee = (
+    employees: Employees[],
+    setEmployees: React.Dispatch<React.SetStateAction<Employees[]>>,
+    localStorageKey: string,
+    defaultEmployee: Employees
+) => {
+    const updatedEmployees = [ ...employees, defaultEmployee ];
+    setEmployees(updatedEmployees);
+    localStorage.setItem(localStorageKey, JSON.stringify(updatedEmployees));
+}
