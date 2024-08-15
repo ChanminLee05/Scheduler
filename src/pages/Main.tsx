@@ -4,6 +4,7 @@ import Graph from "./Graph/Graph";
 import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
 import Checkbox from "./Checkbox/Checkbox";
 import Baekjeong from "../assets/baekjeong.png";
+import html2canvas from "html2canvas";
 
 
 const Main: React.FC = () => {
@@ -18,6 +19,8 @@ const Main: React.FC = () => {
         setFullTimeEmployees(updatedFullTimeEmployees);
         setPartTimeEmployees(updatedPartTimeEmployees);
     };
+
+
 
     return (
         <div className="main-page">

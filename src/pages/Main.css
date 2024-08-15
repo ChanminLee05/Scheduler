@@ -41,6 +41,7 @@ body::before {
     z-index: 10;
     margin-left: 5rem;
 }
+
 #date-input {
     height: clamp(5rem, 4vw, 7rem);
     width: clamp(20rem, 20vw, 21rem);
@@ -49,12 +50,13 @@ body::before {
     margin-left: 5rem;
     z-index: 10;
 }
+
 .baekjeong-img {
     width: clamp(10rem, 13vw, 11rem);
     height: clamp(4.2rem, 5vw, 7vw);
     margin-bottom: -3vw;
     position: absolute;
     top: clamp(3rem, 1.5vw, 3rem);
-    left: clamp(57rem, 61vw, 65vw);
+    left: clamp(57rem, 63vw, 65vw);
     transform: rotateZ(25deg);
 }
