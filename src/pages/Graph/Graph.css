@@ -9,21 +9,28 @@
 .schedule-graph {
     background-color: white;
     z-index: 10;
-    width: clamp(90%, 85vw, 100vw);
+    width: clamp(1300px, 85vw, 100vw);
+    margin-left: 2vw;
 }
 
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
-    font-size: 1.2vw;
     padding: 10px;
     text-align: center;
 }
-
-.day-row {
-    font-size: clamp(1rem, 1.5vw, 1.5vw);
+table {
+    background-color: white;
 }
 
+.day-row {
+    font-size: clamp(2rem, 2vw, 2rem);
+    font-weight: bold;
+}
+
+.manager-row td {
+    font-size: clamp(1.5rem, 1vw, 2.5rem);
+}
 .editable {
     cursor: pointer;
 }
@@ -34,29 +41,77 @@ table, th, td {
 }
 
 .full-time-txt {
-    font-size: clamp(1rem, 1.2vw, 1.2vw);
+    font-size: clamp(1.3rem, 1.2vw, 2rem);
+    font-weight: bold;
 }
 .time-slot {
     background-color: var(--fixed-slot);
     font-weight: bold;
-    font-size: clamp(1rem, 1.4vw, 1.5vw);
+    font-size: clamp(1.3rem, 1.4vw, 2rem);
 }
+
+/*Name on Schedule*/
 .schedule {
     font-weight: bold;
-    font-size: clamp(1rem, 1.4vw, 1.5vw);
+    font-size: clamp(1.5rem, 1.4vw, 2rem);
+    width: 10vw;
 }
+tr:nth-child(6) .schedule {
+    background-color: #A8E6CF;
+}
+tr:nth-child(7) .schedule {
+    background-color: #D1C4E9;
+}
+tr:nth-child(8) .schedule {
+    background-color: #FFCCBC;
+}
+tr:nth-child(13) .schedule {
+    background-color: #A8E6CF;
+}
+tr:nth-child(14) .schedule {
+    background-color: #D1C4E9;
+}
+tr:nth-child(15) .schedule {
+    background-color: #FFCCBC;
+}
+tr:nth-child(16) .schedule {
+    background-color: #A8E6CF;
+}
+tr:nth-child(17) .schedule {
+    background-color: #D1C4E9;
+}
+tr:nth-child(18) .schedule {
+    background-color: #FFCCBC;
+}
+tr:nth-child(19) .schedule {
+    background-color: #A8E6CF;
+}
+tr:nth-child(20) .schedule {
+    background-color: #D1C4E9;
+}
+tr:nth-child(21) .schedule {
+    background-color: #FFCCBC;
+}
+tr:nth-child(23) .schedule {
+    background-color: #B3E5FC;
+}
+
+
 .side-row th {
-    font-size: clamp(1rem, 1.5vw, 1.5vw);
-}
-.side-row td {
-    height: clamp(4rem, 1.5vw, 1.5vw);
+    font-size: clamp(2rem, 1.5vw, 1.5rem);
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    text-transform: uppercase;
 }
 .side {
     background-color: var(--side);
-    font-size: clamp(1rem, 1.2vw, 1.5vw);
+    font-size: clamp(1.5rem, 1.2vw, 2rem);
+    padding: 0;
+    font-weight: bold;
 }
 .shift-time {
-    font-size: clamp(1rem, 1.2vw, 1.5vw);
+    font-size: clamp(1.5rem, 1.2vw, 2rem);
+    font-weight: bold;
 }
 
 /*Row-break*/
