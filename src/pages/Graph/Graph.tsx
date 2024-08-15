@@ -46,7 +46,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td></td>
                         <td></td>
                         {dates && dates.map((date, index) => (
-                            <td key={index} style={{ color: isHoliday(date) ? 'red' : 'black'}}>
+                            <td key={index} className="day-row" style={{ color: isHoliday(date) ? 'red' : 'black'}}>
                                 {formatDay(date)}
                             </td>
                         ))}
@@ -62,7 +62,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     </tr>
                     <tr>
                         <td></td>
-                        <td>FULL TIME</td>
+                        <td className="full-time-txt">FULL TIME</td>
                         <td className="time-slot">{hyobin?.name}</td>
                         <td className="schedule">11:00-8:00</td>
                         <td className="schedule">OFF</td>
@@ -74,7 +74,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     </tr>
                     <tr>
                         <td></td>
-                        <td>FULL TIME</td>
+                        <td className="full-time-txt">FULL TIME</td>
                         <td className="time-slot">{yunseon?.name}</td>
                         <td className="schedule">11:00-CUT</td>
                         <td className="schedule">3:30-STAY</td>
@@ -89,10 +89,10 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     {lunchShift.map((shift, lunchIndex) => (
                         <React.Fragment key={lunchIndex}>
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${lunchIndex}-${posIndex}-1`}>
+                                <tr key={`${lunchIndex}-${posIndex}-1`} className="side-row">
                                     {posIndex === 0 && <th rowSpan={6}>{shift.shift}</th>}
                                     <td className="side">{position}</td>
-                                    <td>{shift.shiftTime[0]}</td>
+                                    <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
                                             {generateCells(2,1,1, () => shift.employees[0] || '', editName)}
@@ -119,7 +119,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                             {shift.position.map((position, posIndex) => (
                                 <tr key={`${lunchIndex}-${posIndex}-2`}>
                                     <td className="side">{position}</td>
-                                    <td>{shift.shiftTime[1]}</td>
+                                    <td className="shift-time">{shift.shiftTime[1]}</td>
                                     {generateCells(5,1,7, () => '', editName)}
                                 </tr>
                             ))}
@@ -134,10 +134,10 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     {dinnerShift.map((shift, dinnerIndex) => (
                         <React.Fragment key={dinnerIndex}>
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${dinnerIndex}-${posIndex}-1`}>
+                                <tr key={`${dinnerIndex}-${posIndex}-1`} className="side-row">
                                     {posIndex === 0 && <th rowSpan={11}>{shift.shift}</th>}
                                     <td className="side">{position}</td>
-                                    <td>{shift.shiftTime[0]}</td>
+                                    <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
                                             {generateCells(6,1,1, () => shift.employees[0] || '', editName)}
@@ -169,9 +169,9 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                 </tr>
                             ))}
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${dinnerIndex}-${posIndex}-2`}>
+                                <tr key={`${dinnerIndex}-${posIndex}-2`} className="side-row">
                                     <td className="side">{position}</td>
-                                    <td>{shift.shiftTime[1]}</td>
+                                    <td className="shift-time">{shift.shiftTime[1]}</td>
                                     {posIndex === 0 && (
                                         <>
                                             {generateDynamicCells(editName, 9,1,1, usedEmployees, "NIGHT",'A')}
@@ -192,9 +192,9 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                 </tr>
                             ))}
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${dinnerIndex}-${posIndex}-2`}>
+                                <tr key={`${dinnerIndex}-${posIndex}-2`} className="side-row">
                                     <td className="side">{position}</td>
-                                    <td>{shift.shiftTime[2]}</td>
+                                    <td className="shift-time">{shift.shiftTime[2]}</td>
                                     {posIndex === 0 && (
                                         <>
                                             {generateDynamicCells(editName, 12,1,4, usedEmployees, "NIGHT",'A')}
@@ -228,9 +228,9 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                             {hostShift.map((shift, hostIndex) => (
                                 <React.Fragment key={hostIndex}>
                                     {shift.position.map((position, posIndex) => (
-                                        <tr key={`${hostIndex}-${posIndex}-1`}>
+                                        <tr key={`${hostIndex}-${posIndex}-1`} className="side-row">
                                             <td className="side">{position}</td>
-                                            <td>{shift.shiftTime[0]}</td>
+                                            <td className="shift-time">{shift.shiftTime[0]}</td>
                                             {posIndex === 0 && (
                                                 <>
                                                     {generateDynamicCells(editName, 15,1,7, usedEmployees, "NIGHT",'HOST')}
@@ -243,14 +243,17 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         </React.Fragment>
                     ))}
 
+                    <tr className="row-break">
+                        <td colSpan={days.length + 3}></td>
+                    </tr>
                             {/*Training*/}
                             {trainingShift.map((shift, trainningIndex) => (
                                 <React.Fragment key={trainningIndex}>
                                     {shift.position.map((position, posIndex) => (
-                                        <tr key={`${trainningIndex}-${posIndex}-1`}>
+                                        <tr key={`${trainningIndex}-${posIndex}-1`} className="side-row">
                                             {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
                                             <td className="side">{position}</td>
-                                            <td>{shift.shiftTime[0]}</td>
+                                            <td className="shift-time">{shift.shiftTime[0]}</td>
                                             {posIndex === 0 && (
                                                 <>
                                                     {generateCells(16,1,7, () => '', editName)}

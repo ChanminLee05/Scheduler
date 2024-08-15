@@ -1,21 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Lilita+One&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Lilita+One&family=Lobster&family=Teko:wght@300..700&display=swap');
+
 body {
-    background: url("../assets/background1.jpg") no-repeat center;
+    background: url("../assets/background2.jpg") no-repeat center;
     background-size: cover;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+body::before {
+    content: "";
+    width: clamp(80rem, 100vw, 100vw);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 .main-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 2vw 5vw 2vw;
+    width: clamp(1300px, 100vw, 100vw);
+    padding-bottom: clamp(1rem, 2vw, 3rem);
 }
 .main-page h1 {
-    font-size: 4vw;
+    font-size: clamp(3.5rem, 3.5vw, 4vw);
+    font-family: "Lobster", sans-serif;
+    position: relative;
 }
 .main-page p {
-    font-size: 2vw;
+    font-family: "Teko", sans-serif;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: clamp(3rem, 4vw, 4vw);
 }
 #date-input {
-    width: 10vw;
-    font-size: 1.2vw;
-    margin: 1vw 0;
+    height: clamp(3rem, 2vw, 2vw);
+    width: clamp(15rem, 15vw, 15vw);
+    font-size: clamp(2.5rem, 1.3vw, 1.3vw);
+    margin-bottom: clamp(3rem, 4vw, 4vw);
+}
+.baekjeong-img {
+    width: clamp(10rem, 13vw, 13vw);
+    height: clamp(4.2rem, 5vw, 7vw);
+    margin-bottom: -3vw;
+    position: absolute;
+    top: clamp(1.5rem, 1px, 3vw);
+    left: clamp(52rem, 60vw, 70vw);
+    transform: rotateZ(25deg);
 }

@@ -18,7 +18,7 @@ export const dinnerShift: Shift[] = [
     {
         shift: 'Dinner',
         position: ['A', 'B', 'BAR'],
-        shiftTime: ['3:30-1st CUT', '4:30-2nd CUT', '5:30-STAY'],
+        shiftTime: ['3:30-1stCUT', '4:30-2ndCUT', '5:30-STAY'],
         employees: ["YUNSEON(D)", "HYOBIN(D)", "YUNSEON", "HYOBIN"]
     }
 ]
@@ -26,7 +26,7 @@ export const dinnerShift: Shift[] = [
 export const hostShift: Omit<Shift, "employees" | "shift">[] = [
     {
         position: ['HOST'],
-        shiftTime: ['4:00-Last Call']
+        shiftTime: ['4:00-LastCall']
     }
 ]
 

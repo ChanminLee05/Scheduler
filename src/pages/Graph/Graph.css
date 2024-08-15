@@ -9,6 +9,7 @@
 .schedule-graph {
     background-color: white;
     z-index: 10;
+    width: clamp(90%, 85vw, 100vw);
 }
 
 table, th, td {
@@ -19,8 +20,8 @@ table, th, td {
     text-align: center;
 }
 
-td {
-    width: 8vw;
+.day-row {
+    font-size: clamp(1rem, 1.5vw, 1.5vw);
 }
 
 .editable {
@@ -32,19 +33,33 @@ td {
     color: white;
 }
 
+.full-time-txt {
+    font-size: clamp(1rem, 1.2vw, 1.2vw);
+}
 .time-slot {
     background-color: var(--fixed-slot);
     font-weight: bold;
+    font-size: clamp(1rem, 1.4vw, 1.5vw);
 }
 .schedule {
     font-weight: bold;
-    font-size: 1.4vw;
+    font-size: clamp(1rem, 1.4vw, 1.5vw);
+}
+.side-row th {
+    font-size: clamp(1rem, 1.5vw, 1.5vw);
+}
+.side-row td {
+    height: clamp(4rem, 1.5vw, 1.5vw);
 }
 .side {
     background-color: var(--side);
+    font-size: clamp(1rem, 1.2vw, 1.5vw);
+}
+.shift-time {
+    font-size: clamp(1rem, 1.2vw, 1.5vw);
 }
 
 /*Row-break*/
-.row-break {
+.row-break td {
     background-color: var(--row-break);
 }
