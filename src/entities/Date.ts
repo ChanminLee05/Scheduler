@@ -9,6 +9,7 @@ export const holidays = [
     "2024-10-14", // Thanksgiving Day
     "2024-11-11", // Remembrance Day
     "2024-12-25", // Christmas Day
+    "2024-12-26", // Boxing Day
 ];
 
 export const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];

@@ -38,7 +38,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <th></th>
                         <th></th>
                         {days.map((day, index) => (
-                            <th key={index}>{day}</th>
+                            <th key={index} className="day-head">{day}</th>
                         ))}
                     </tr>
                     <tr>
@@ -51,7 +51,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                             </td>
                         ))}
                     </tr>
-                    <tr>
+                    <tr className="manager-row">
                         <td></td>
                         <td></td>
                         <td></td>
@@ -61,28 +61,28 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td className="schedule editable">{editName(1,7,'OFF')}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td className="full-time-txt">FULL TIME</td>
+                        {/*<td></td>*/}
+                        <td className="full-time-txt" colSpan={2}>FULL TIME</td>
                         <td className="time-slot">{hyobin?.name}</td>
-                        <td className="schedule">11:00-8:00</td>
-                        <td className="schedule">OFF</td>
-                        <td className="schedule">OFF</td>
-                        <td className="schedule">3:30-STAY</td>
-                        <td className="schedule">3:30-STAY</td>
-                        <td className="schedule">3:30-LC</td>
-                        <td className="schedule">11:00-8:00</td>
+                        <td className="schedule time-slot">11:00-8:00</td>
+                        <td className="schedule time-slot">OFF</td>
+                        <td className="schedule time-slot">OFF</td>
+                        <td className="schedule time-slot">3:30-STAY</td>
+                        <td className="schedule time-slot">3:30-STAY</td>
+                        <td className="schedule time-slot">3:30-LC</td>
+                        <td className="schedule time-slot">11:00-8:00</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td className="full-time-txt">FULL TIME</td>
+                        {/*<td></td>*/}
+                        <td className="full-time-txt" colSpan={2}>FULL TIME</td>
                         <td className="time-slot">{yunseon?.name}</td>
-                        <td className="schedule">11:00-CUT</td>
-                        <td className="schedule">3:30-STAY</td>
-                        <td className="schedule">OFF</td>
-                        <td className="schedule">OFF</td>
-                        <td className="schedule">3:30-STAY</td>
-                        <td className="schedule">3:30-CUT</td>
-                        <td className="schedule">11:00-CUT</td>
+                        <td className="schedule time-slot">11:00-CUT</td>
+                        <td className="schedule time-slot">3:30-STAY</td>
+                        <td className="schedule time-slot">OFF</td>
+                        <td className="schedule time-slot">OFF</td>
+                        <td className="schedule time-slot">3:30-STAY</td>
+                        <td className="schedule time-slot">3:30-CUT</td>
+                        <td className="schedule time-slot">11:00-CUT</td>
                     </tr>
 
                     {/*Lunch*/}
