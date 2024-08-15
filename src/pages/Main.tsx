@@ -3,6 +3,7 @@ import "./Main.css";
 import Graph from "./Graph/Graph";
 import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
 import Checkbox from "./Checkbox/Checkbox";
+import Baekjeong from "../assets/baekjeong.png";
 
 
 const Main: React.FC = () => {
@@ -20,6 +21,7 @@ const Main: React.FC = () => {
 
     return (
         <div className="main-page">
+            <img src={Baekjeong} alt={Baekjeong} className="baekjeong-img"/>
             <h1>Baekjeong Scheduler</h1>
             <Checkbox
                 fullTimeEmployees={fullTimeEmployees}
