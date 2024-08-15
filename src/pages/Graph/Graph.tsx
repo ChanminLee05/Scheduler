@@ -6,6 +6,7 @@ import {getDate, formatDay, isHoliday} from "../../features/TimeController";
 import {useEditName} from "../../features/UseEditName";
 import {generateCells, generateDynamicCells } from "../../features/CellUtills";
 import {lunchShift, dinnerShift, trainingShift, hostShift} from "../../entities/Shifts";
+import html2canvas from "html2canvas";
 
 interface GraphProps {
     startDate: string | null;
@@ -29,10 +30,24 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
 
     const { editName } = useEditName({ data, setData});
 
+    const handleSave = () => {
+        const element = document.getElementById("schedule-table");
+        if (element) {
+            html2canvas(element).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "baekjeong-schedule.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            })
+        }
+    }
+
     return (
-        <div className="schedule-graph">
-            <table id="schedule-table">
-                <tbody>
+        <>
+            <button type="button" className="save-btn" onClick={handleSave}><i className="fa-solid fa-share-from-square"></i></button>
+            <div className="schedule-graph">
+                <table id="schedule-table">
+                    <tbody>
                     <tr className="head-row">
                         <th></th>
                         <th></th>
@@ -61,7 +76,6 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td className="schedule editable">{editName(1,7,'OFF')}</td>
                     </tr>
                     <tr>
-                        {/*<td></td>*/}
                         <td className="full-time-txt" colSpan={2}>FULL TIME</td>
                         <td className="time-slot">{hyobin?.name}</td>
                         <td className="schedule time-slot">11:00-8:00</td>
@@ -73,7 +87,6 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td className="schedule time-slot">11:00-8:00</td>
                     </tr>
                     <tr>
-                        {/*<td></td>*/}
                         <td className="full-time-txt" colSpan={2}>FULL TIME</td>
                         <td className="time-slot">{yunseon?.name}</td>
                         <td className="schedule time-slot">11:00-CUT</td>
@@ -89,7 +102,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     {lunchShift.map((shift, lunchIndex) => (
                         <React.Fragment key={lunchIndex}>
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${lunchIndex}-${posIndex}-1`} className="side-row">
+                                <tr key={`${lunchIndex}-${posIndex}-1`} className="side-row" >
                                     {posIndex === 0 && <th rowSpan={6}>{shift.shift}</th>}
                                     <td className="side">{position}</td>
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
@@ -246,36 +259,38 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                     <tr className="row-break">
                         <td colSpan={days.length + 3}></td>
                     </tr>
-                            {/*Training*/}
-                            {trainingShift.map((shift, trainningIndex) => (
-                                <React.Fragment key={trainningIndex}>
-                                    {shift.position.map((position, posIndex) => (
-                                        <tr key={`${trainningIndex}-${posIndex}-1`} className="side-row">
-                                            {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
-                                            <td className="side">{position}</td>
-                                            <td className="shift-time">{shift.shiftTime[0]}</td>
-                                            {posIndex === 0 && (
-                                                <>
-                                                    {generateCells(16,1,7, () => '', editName)}
-                                                </>
-                                            )}
-                                            {posIndex === 1 && (
-                                                <>
-                                                    {generateCells(17,1,7, () => '', editName)}
-                                                </>
-                                            )}
-                                            {posIndex === 2 && (
-                                                <>
-                                                    {generateCells(18,1,7, () => '', editName)}
-                                                </>
-                                            )}
-                                        </tr>
-                                    ))}
-                                </React.Fragment>
+                    {/*Training*/}
+                    {trainingShift.map((shift, trainningIndex) => (
+                        <React.Fragment key={trainningIndex}>
+                            {shift.position.map((position, posIndex) => (
+                                <tr key={`${trainningIndex}-${posIndex}-1`} className="side-row">
+                                    {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
+                                    <td className="side">{position}</td>
+                                    <td className="shift-time">{shift.shiftTime[0]}</td>
+                                    {posIndex === 0 && (
+                                        <>
+                                            {generateCells(16,1,7, () => '', editName)}
+                                        </>
+                                    )}
+                                    {posIndex === 1 && (
+                                        <>
+                                            {generateCells(17,1,7, () => '', editName)}
+                                        </>
+                                    )}
+                                    {posIndex === 2 && (
+                                        <>
+                                            {generateCells(18,1,7, () => '', editName)}
+                                        </>
+                                    )}
+                                </tr>
                             ))}
-                </tbody>
-            </table>
-        </div>
+                        </React.Fragment>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
+
     );
 };
 
