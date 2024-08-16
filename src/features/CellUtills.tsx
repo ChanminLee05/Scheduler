@@ -23,6 +23,10 @@ export const generateCells = (
                 setValue(newValue.toUpperCase())
                 editName(rowIndex, cellIndex, newValue.toUpperCase());
             }
+
+            if (newValue === "") {
+                setValue('\u200B');
+            }
         };
 
         return (

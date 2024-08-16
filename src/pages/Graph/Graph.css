@@ -25,6 +25,7 @@ table, th, td {
 }
 table {
     background-color: white;
+    cursor: default;
 }
 
 .save-btn {
@@ -74,11 +75,14 @@ table {
     font-size: clamp(1.3rem, 1.4vw, 2rem);
 }
 
-.side-row th {
+.vertical-text {
     font-size: clamp(2rem, 1.5vw, 1.5rem);
-    writing-mode: vertical-lr;
-    text-orientation: upright;
+    vertical-align: middle;
     text-transform: uppercase;
+}
+.vertical-text span {
+    display: block;
+    text-align: center;
 }
 .side {
     background-color: var(--side);

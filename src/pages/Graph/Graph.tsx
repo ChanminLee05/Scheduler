@@ -106,7 +106,13 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <React.Fragment key={lunchIndex}>
                             {shift.position.map((position, posIndex) => (
                                 <tr key={`${lunchIndex}-${posIndex}-1`} className="side-row" >
-                                    {posIndex === 0 && <th rowSpan={6}>{shift.shift}</th>}
+                                    {posIndex === 0 &&
+                                        <th rowSpan={6} className="vertical-text">
+                                            {shift.shift.split("").map((letter, index) =>(
+                                            <span key={index}>{letter}</span>
+                                            ))}
+                                        </th>
+                                    }
                                     <td className="side">{position}</td>
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
@@ -151,7 +157,13 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <React.Fragment key={dinnerIndex}>
                             {shift.position.map((position, posIndex) => (
                                 <tr key={`${dinnerIndex}-${posIndex}-1`} className="side-row">
-                                    {posIndex === 0 && <th rowSpan={11}>{shift.shift}</th>}
+                                    {posIndex === 0 &&
+                                        <th rowSpan={11} className="vertical-text">
+                                            {shift.shift.split("").map((letter, index) =>(
+                                                <span key={index}>{letter}</span>
+                                            ))}
+                                        </th>
+                                    }
                                     <td className="side">{position}</td>
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
@@ -246,7 +258,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     {shift.position.map((position, posIndex) => (
                                         <tr key={`${hostIndex}-${posIndex}-1`} className="side-row">
                                             <td className="side">{position}</td>
-                                            <td className="shift-time">{shift.shiftTime[0]}</td>
+                                            <th className="shift-time">{shift.shiftTime[0]}</th>
                                             {posIndex === 0 && (
                                                 <>
                                                     {generateDynamicCells(editName, 23,1,7, usedEmployees, "NIGHT",'HOST')}
@@ -267,21 +279,29 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <React.Fragment key={trainingIndex}>
                             {shift.position.map((position, posIndex) => (
                                 <tr key={`${trainingIndex}-${posIndex}-1`} className="side-row">
-                                    {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
+                                    {posIndex === 0 &&
+                                        <th rowSpan={3} className="vertical-text">
+                                            {shift.shift.split("").map((letter, index) =>(
+                                                <span key={index}>{letter}</span>
+                                            ))}
+                                        </th>
+                                    }
                                     <td className="side">{position}</td>
-                                    <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
+                                            <td className="shift-time">{shift.shiftTime[0]}</td>
                                             {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
+                                            <td className="shift-time">{shift.shiftTime[1]}</td>
                                             {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
+                                            <td className="shift-time">{shift.shiftTime[0]}</td>
                                             {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
