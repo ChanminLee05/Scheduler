@@ -32,34 +32,26 @@ export const generateCells = (
     });
 }
 
-const getDayOfWeek = (index: number) => {
-    if (index < 1 || index > days.length) {
-        return '';
-    }
-    return days[index - 1];
-}
+const getDayOfWeek = (index: number): string => {
+    return index >= 1 && index <= days.length ? days[index - 1] : "Invalid day";
+};
 
 export const generateDynamicCells = (
     editName: (rowIndex: number, cellIndex: number, value: string) => JSX.Element,
     rowIndex: number,
     startCellIndex: number,
     endCellIndex: number,
-    usedEmployees: Record<string, number>,
+    usedEmployees: Record<number, Set<string>>,
     timeOfDay?: "DAY" | "NIGHT",
     position?: string
 ) => {
-    const assignedEmployees: Record<string, Set<string>> = {};
-
     const getEmployeeNameForCell = (cellIndex: number): string => {
         const dayOfWeek = getDayOfWeek(cellIndex);
-        if (!dayOfWeek) {
-            return "Invalid day";
-        }
-        if (!timeOfDay) {
-            return "Invalid time of day";
+        if (dayOfWeek === "Invalid day" || !timeOfDay) {
+            return "Invalid data";
         }
 
-        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, assignedEmployees, position, cellIndex);
+        return assignToSchedule(dayOfWeek, timeOfDay, usedEmployees, position, cellIndex);
     };
 
     return generateCells(rowIndex, startCellIndex, endCellIndex, getEmployeeNameForCell, editName);
