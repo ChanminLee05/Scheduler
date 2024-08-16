@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./Main.css";
 import Graph from "./Graph/Graph";
-import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
+import {Employees, partTimeEmployeeSchedule, fullTimeEmployeeSchedule} from "../entities/Employees";
 import Checkbox from "./Checkbox/Checkbox";
 import Baekjeong from "../assets/baekjeong.png";
 import html2canvas from "html2canvas";
@@ -9,7 +9,7 @@ import html2canvas from "html2canvas";
 
 const Main: React.FC = () => {
     const [startDate, setStartDate] = useState<string | null>("N/A");
-    const [fullTimeEmployees, setFullTimeEmployees] = useState(fulltimeEmployeeSchedule);
+    const [fullTimeEmployees, setFullTimeEmployees] = useState(fullTimeEmployeeSchedule);
     const [partTimeEmployees, setPartTimeEmployees] = useState(partTimeEmployeeSchedule);
     const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStartDate(e.target.value);
