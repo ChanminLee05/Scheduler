@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./Checkbox.css";
-import {fulltimeEmployeeSchedule, partTimeEmployeeSchedule, Employees} from "../../entities/Employees";
+import {fullTimeEmployeeSchedule, partTimeEmployeeSchedule, Employees} from "../../entities/Employees";
 import {days} from "../../entities/Date";
 import {
     addEmployee,

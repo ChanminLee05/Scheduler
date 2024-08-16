@@ -33,12 +33,15 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
     const handleSave = () => {
         const element = document.getElementById("schedule-table");
         if (element) {
-            html2canvas(element).then(canvas => {
-                const link = document.createElement("a");
-                link.download = "baekjeong-schedule.png";
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            })
+            const confirm = window.confirm("Are you sure to save this image?");
+            if (confirm) {
+                html2canvas(element).then(canvas => {
+                    const link = document.createElement("a");
+                    link.download = "baekjeong-schedule.png";
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                })
+            }
         }
     }
 
@@ -70,7 +73,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td></td>
                         <td></td>
                         <td></td>
-                        {generateCells(1, 1, 4, () => manager?.name || '', editName)}
+                        {generateCells(3, 1, 4, () => manager?.name || '', editName)}
                         <td className="schedule editable">{editName(1,5,'OFF')}</td>
                         <td className="schedule editable">{editName(1,6,manager?.name || '')}</td>
                         <td className="schedule editable">{editName(1,7,'OFF')}</td>
@@ -108,23 +111,23 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateCells(2,1,1, () => shift.employees[0] || '', editName)}
-                                            {generateCells(2,2,6, () => '', editName)}
-                                            {generateCells(2,7,7, () => shift.employees[1] || '', editName)}
+                                            {generateCells(6,1,1, () => shift.employees[0] || '', editName)}
+                                            {generateCells(6,2,6, () => '', editName)}
+                                            {generateCells(6,7,7, () => shift.employees[1] || '', editName)}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
-                                            {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B') }
-                                            {generateCells(3,2,6, () => '', editName)}
-                                            {generateDynamicCells(editName, 3,1,1, usedEmployees, "DAY",'B') }
+                                            {generateDynamicCells(editName, 7,1,1, usedEmployees, "DAY",'B') }
+                                            {generateCells(7,2,6, () => '', editName)}
+                                            {generateDynamicCells(editName, 7,7,7, usedEmployees, "DAY",'B') }
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateCells(4,1,1, () => shift.employees[1] || '', editName)}
-                                            {generateCells(4,2,6, () => '', editName)}
-                                            {generateCells(4,7,7, () => shift.employees[0] || '', editName)}
+                                            {generateCells(8,1,1, () => shift.employees[1] || '', editName)}
+                                            {generateCells(8,2,6, () => '', editName)}
+                                            {generateCells(8,7,7, () => shift.employees[0] || '', editName)}
                                         </>
                                     )}
                                 </tr>
@@ -133,7 +136,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                 <tr key={`${lunchIndex}-${posIndex}-2`}>
                                     <td className="side">{position}</td>
                                     <td className="shift-time">{shift.shiftTime[1]}</td>
-                                    {generateCells(5,1,7, () => '', editName)}
+                                    {generateCells(9,1,7, () => '', editName)}
                                 </tr>
                             ))}
                         </React.Fragment>
@@ -153,30 +156,30 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateCells(6,1,1, () => shift.employees[0] || '', editName)}
-                                            {generateDynamicCells(editName, 6,2,4, usedEmployees, "NIGHT",'A') }
-                                            {generateCells(6,5,5, () => shift.employees[3] || '', editName)}
-                                            {generateDynamicCells(editName, 6,6,6, usedEmployees, "NIGHT",'A') }
-                                            {generateCells(6,7,7, () => shift.employees[1] || '', editName)}
+                                            {generateCells(13,1,1, () => shift.employees[0] || '', editName)}
+                                            {generateDynamicCells(editName, 13,2,4, usedEmployees, "NIGHT",'A') }
+                                            {generateCells(13,5,5, () => shift.employees[3] || '', editName)}
+                                            {generateDynamicCells(editName, 13,6,6, usedEmployees, "NIGHT",'A') }
+                                            {generateCells(13,7,7, () => shift.employees[1] || '', editName)}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
-                                            {generateDynamicCells(editName, 7,1,1, usedEmployees, "NIGHT",'B') }
-                                            {generateCells(7,2,2, () => shift.employees[2] || '', editName)}
-                                            {generateDynamicCells(editName, 7,3,5, usedEmployees, "NIGHT",'B') }
-                                            {generateCells(7,6,6, () => shift.employees[2] || '', editName)}
-                                            {generateDynamicCells(editName, 7,7,7, usedEmployees, "NIGHT",'B') }
+                                            {generateDynamicCells(editName, 14,1,1, usedEmployees, "NIGHT",'B') }
+                                            {generateCells(14,2,2, () => shift.employees[2] || '', editName)}
+                                            {generateDynamicCells(editName, 14,3,5, usedEmployees, "NIGHT",'B') }
+                                            {generateCells(14,6,6, () => shift.employees[2] || '', editName)}
+                                            {generateDynamicCells(editName, 14,7,7, usedEmployees, "NIGHT",'B') }
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateCells(8,1,1, () => shift.employees[1] || '', editName)}
-                                            {generateDynamicCells(editName, 8,2,3, usedEmployees, "NIGHT",'BAR') }
-                                            {generateCells(8,4,4, () => shift.employees[3] || '', editName)}
-                                            {generateCells(8,5,5, () => shift.employees[2] || '', editName)}
-                                            {generateCells(8,6,6, () => shift.employees[3] || '', editName)}
-                                            {generateCells(8,7,7, () => shift.employees[0] || '', editName)}
+                                            {generateCells(15,1,1, () => shift.employees[1] || '', editName)}
+                                            {generateDynamicCells(editName, 15,2,3, usedEmployees, "NIGHT",'BAR') }
+                                            {generateCells(15,4,4, () => shift.employees[3] || '', editName)}
+                                            {generateCells(15,5,5, () => shift.employees[2] || '', editName)}
+                                            {generateCells(15,6,6, () => shift.employees[3] || '', editName)}
+                                            {generateCells(15,7,7, () => shift.employees[0] || '', editName)}
                                         </>
                                     )}
                                 </tr>
@@ -187,19 +190,19 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     <td className="shift-time">{shift.shiftTime[1]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateDynamicCells(editName, 9,1,1, usedEmployees, "NIGHT",'A')}
-                                            {generateCells(9,2,4, () => 'X', editName)}
-                                            {generateDynamicCells(editName, 9,5,7, usedEmployees, "NIGHT",'A')}
+                                            {generateDynamicCells(editName, 16,1,1, usedEmployees, "NIGHT",'A')}
+                                            {generateCells(16,2,4, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 16,5,7, usedEmployees, "NIGHT",'A')}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
-                                            {generateDynamicCells(editName, 10,1,7, usedEmployees, "NIGHT",'B')}
+                                            {generateDynamicCells(editName, 17,1,7, usedEmployees, "NIGHT",'B')}
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateDynamicCells(editName, 11,1,7, usedEmployees, "NIGHT",'BAR')}
+                                            {generateDynamicCells(editName, 18,1,7, usedEmployees, "NIGHT",'BAR')}
                                         </>
                                     )}
                                 </tr>
@@ -210,23 +213,23 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                     <td className="shift-time">{shift.shiftTime[2]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateDynamicCells(editName, 12,1,4, usedEmployees, "NIGHT",'A')}
-                                            {generateCells(12,5,5, () => 'X', editName)}
-                                            {generateDynamicCells(editName, 12,6,7, usedEmployees, "NIGHT",'A')}
+                                            {generateDynamicCells(editName, 19,1,4, usedEmployees, "NIGHT",'A')}
+                                            {generateCells(19,5,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 19,6,7, usedEmployees, "NIGHT",'A')}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
-                                            {generateDynamicCells(editName, 13,1,1, usedEmployees, "NIGHT",'B')}
-                                            {generateCells(13,2,5, () => 'X', editName)}
-                                            {generateDynamicCells(editName, 13,6,7, usedEmployees, "NIGHT",'B')}
+                                            {generateDynamicCells(editName, 20,1,1, usedEmployees, "NIGHT",'B')}
+                                            {generateCells(20,2,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 20,6,7, usedEmployees, "NIGHT",'B')}
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateDynamicCells(editName, 14,1,1, usedEmployees, "NIGHT",'BAR')}
-                                            {generateCells(14,2,5, () => 'X', editName)}
-                                            {generateDynamicCells(editName, 14,6,7, usedEmployees, "NIGHT",'BAR')}
+                                            {generateDynamicCells(editName, 21,1,1, usedEmployees, "NIGHT",'BAR')}
+                                            {generateCells(21,2,5, () => 'X', editName)}
+                                            {generateDynamicCells(editName, 21,6,7, usedEmployees, "NIGHT",'BAR')}
                                         </>
                                     )}
                                 </tr>
@@ -246,7 +249,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                                             <td className="shift-time">{shift.shiftTime[0]}</td>
                                             {posIndex === 0 && (
                                                 <>
-                                                    {generateDynamicCells(editName, 15,1,7, usedEmployees, "NIGHT",'HOST')}
+                                                    {generateDynamicCells(editName, 23,1,7, usedEmployees, "NIGHT",'HOST')}
                                                 </>
                                             )}
                                         </tr>
@@ -260,26 +263,26 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
                         <td colSpan={days.length + 3}></td>
                     </tr>
                     {/*Training*/}
-                    {trainingShift.map((shift, trainningIndex) => (
-                        <React.Fragment key={trainningIndex}>
+                    {trainingShift.map((shift, trainingIndex) => (
+                        <React.Fragment key={trainingIndex}>
                             {shift.position.map((position, posIndex) => (
-                                <tr key={`${trainningIndex}-${posIndex}-1`} className="side-row">
+                                <tr key={`${trainingIndex}-${posIndex}-1`} className="side-row">
                                     {posIndex === 0 && <th rowSpan={3}>{shift.shift}</th>}
                                     <td className="side">{position}</td>
                                     <td className="shift-time">{shift.shiftTime[0]}</td>
                                     {posIndex === 0 && (
                                         <>
-                                            {generateCells(16,1,7, () => '', editName)}
+                                            {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
                                     {posIndex === 1 && (
                                         <>
-                                            {generateCells(17,1,7, () => '', editName)}
+                                            {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
                                     {posIndex === 2 && (
                                         <>
-                                            {generateCells(18,1,7, () => '', editName)}
+                                            {generateCells(25,1,7, () => '', editName)}
                                         </>
                                     )}
                                 </tr>

@@ -6,7 +6,7 @@ export interface Employees {
     maxShifts: number;
 }
 
-export const fulltimeEmployeeSchedule: Employees[] = [
+export const fullTimeEmployeeSchedule: Employees[] = [
     { name: "WILL", availableDay: ["SUN", "MON", "TUE", "WED", "FRI"], availableTime: ["DAY", "NIGHT"], availablePosition: ["Manager", "HOST"], maxShifts: 2},
     { name: "HYOBIN", availableDay: ["SUN", "WED", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR", "HOST"], maxShifts: 5},
     { name: "YUNSEON", availableDay: ["SUN", "MON", "THU", "FRI", "SAT"], availableTime: ["DAY", "NIGHT"], availablePosition : ["A", "B", "BAR"], maxShifts: 5},

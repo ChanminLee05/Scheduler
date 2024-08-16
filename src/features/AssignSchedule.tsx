@@ -1,4 +1,4 @@
-import {Employees, partTimeEmployeeSchedule, fulltimeEmployeeSchedule} from "../entities/Employees";
+import {Employees} from "../entities/Employees";
 
 const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<string, number>) => {
     const employeeArray: string[] = [];
@@ -21,13 +21,16 @@ const getRandomEmployeeName = (employees: Employees[], usedEmployees: Record<str
     usedEmployees[selectedEmployee] = (usedEmployees[selectedEmployee] || 0) + 1;
 
     return selectedEmployee;
-
 }
 
 export const getEmployeeAvailableDay = (day: string) => {
-    const fullTimeEmployees = fulltimeEmployeeSchedule.filter(employee => employee.availableDay.includes(day));
-    const partTimeEmployees = partTimeEmployeeSchedule.filter(employee => employee.availableDay.includes(day));
-    return [...fullTimeEmployees, ...partTimeEmployees];
+    const fullTimeEmployees = JSON.parse(localStorage.getItem("FullTimeEmployees") || '[]') as Employees[];
+    const partTimeEmployees = JSON.parse(localStorage.getItem("PartTimeEmployees") || '[]') as Employees[];
+
+    const availableFullTimeEmployees = fullTimeEmployees.filter(employee => employee.availableDay.includes(day));
+    const availablePartTimeEmployees = partTimeEmployees.filter(employee => employee.availableDay.includes(day));
+
+    return [...availableFullTimeEmployees, ...availablePartTimeEmployees];
 };
 
 const getEmployeeAvailableTime = (employees: Employees[], timeOfDay: "DAY" | "NIGHT") => {
