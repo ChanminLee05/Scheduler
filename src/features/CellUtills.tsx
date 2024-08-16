@@ -1,6 +1,6 @@
 import {days} from "../entities/Date";
 import {assignToSchedule} from "./AssignSchedule";
-import React from "react";
+import React, {useState} from "react";
 
 export const generateCells = (
     rowIndex: number,
@@ -15,11 +15,12 @@ export const generateCells = (
 ) => {
     return Array.from({ length: endCellIndex - startCellIndex + 1 }, (_, i) => {
         const cellIndex = startCellIndex + i;
-        const value = getText(cellIndex);
+        const [value, setValue] = useState(getText(cellIndex));
         // console.log("index and value", `${cellIndex} and ${value}`)
         const handleClick = () => {
             const newValue = prompt("Enter new name:", value);
             if (newValue) {
+                setValue(newValue.toUpperCase())
                 editName(rowIndex, cellIndex, newValue.toUpperCase());
             }
         };
