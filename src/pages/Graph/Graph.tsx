@@ -18,7 +18,7 @@ const Graph: React.FC<GraphProps> = ({ startDate, fullTimeEmployees, partTimeEmp
 
     const dates = startDate ? getDate(startDate) : [];
 
-    const usedEmployees: Record<string, number> = {};
+    const usedEmployees: Record<number, Set<string>> = {};
 
     const getFulltimeEmployeeName = (name: string) => {
         return fullTimeEmployees.find(fullTimeEmployee => fullTimeEmployee.name === name);
